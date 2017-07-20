@@ -1,0 +1,5 @@
+.env
+*.pyc
+logs/*.log
+.idea/
+crawler/out.txt
