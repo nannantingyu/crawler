@@ -111,6 +111,7 @@ class JiankongTongjiSpider(scrapy.Spider):
                 monitor_stastic_item['site'] = self.site_maps.values()[self.index]
                 monitor_stastic_item['day'] = self.start_time
                 monitor_stastic_list[item_index] = monitor_stastic_item
+                item_index += 1
         yield monitor_stastic_list
 
         self.index += 1
