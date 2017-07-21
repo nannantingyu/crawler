@@ -51,8 +51,6 @@ class JiankongbaoSpider(scrapy.Spider):
             pages = response.xpath("//div[@class='pages']/a/text()").extract()
             self.list_page = pages[-1] if len(pages) > 0 else 0
 
-        url_param = util.get_url_param(response.url)
-
         trs = response.xpath("//tr[starts-with(@class, 'int')]")
         for tr in trs:
             id = tr.xpath(".//td[3]/a/@id").extract_first()
@@ -60,6 +58,7 @@ class JiankongbaoSpider(scrapy.Spider):
             title = tr.xpath(".//td[4]/a/text()").extract_first()
             title = title.replace("https://", "").replace("http://", "").strip("/")
             #只抓取要抓的站点
+            logging.info("[get site] " + title)
             if title in self.crawl_site:
                 self.site_maps[id] = title
 
@@ -199,10 +198,6 @@ class JiankongbaoSpider(scrapy.Spider):
             meta={'cookiejar': response.meta['cookiejar']}, callback=self.parse_time)
 
     def parse_time(self, response):
-        with open("D://time.json", "w") as fs:
-            fs.write(response.body)
-            fs.flush()
-
         result = json.loads(response.body)
 
         monitor_names = result['monitor_name']
