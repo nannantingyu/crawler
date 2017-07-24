@@ -21,6 +21,13 @@ class JiankongTongjiSpider(scrapy.Spider):
     crawl_site = ["www.91pme.com", "m.91pme.com"]
     start_time = None
 
+    def __init__(self, category=None, *args, **kwargs):
+        super(JiankongTongjiSpider, self).__init__(*args, **kwargs)
+        if kwargs:
+            sites = str(kwargs['sites']).split(",")
+            if sites and len(sites) > 0:
+                self.crawl_site = sites
+
     def start_requests(self):
         form_data = {
             "email": "yangmingming@91guoxin.com",

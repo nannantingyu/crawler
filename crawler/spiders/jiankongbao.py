@@ -24,13 +24,11 @@ class JiankongbaoSpider(scrapy.Spider):
     start_time = None
 
     def __init__(self, category=None, *args, **kwargs):
-        print kwargs
         super(JiankongbaoSpider, self).__init__(*args, **kwargs)
         if kwargs:
             sites = str(kwargs['sites']).split(",")
             if sites and len(sites) > 0:
                 self.crawl_site = sites
-                print sites
 
     def start_requests(self):
         form_data = {
