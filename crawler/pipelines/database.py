@@ -86,7 +86,25 @@ class JianKongPipeline(object):
             for it in item.values():
                 all_items.append(MonitorChart(**it))
             with session_scope(self.sess) as session:
-                session.add_all(all_items)
+                for db_item in all_items:
+                    query = session.query(MonitorChart.id).filter(and_(
+                        MonitorChart.time == db_item.time,
+                        MonitorChart.type == db_item.type,
+                        MonitorChart.site == db_item.site,
+                        MonitorChart.monitor_name == db_item.monitor_name
+                    )).one_or_none()
+
+                    if query is None:
+                        session.add(db_item)
+                    else:
+                        data = {}
+                        if db_item.value is not None:
+                            data['value'] = db_item.value
+
+                        if data:
+                            session.query(MonitorChart).filter(
+                                MonitorChart.id == query[0]).update(data)
+
 
         elif isinstance(item.values()[0], items.MonitorProvinceItem):
             all_items = []
