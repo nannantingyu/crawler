@@ -51,10 +51,13 @@ ITEM_PIPELINES = {
     'crawler.pipelines.database.JianKongPipeline': 3,
 }
 
+REDIRECT_ENABLED = False
+
 DOWNLOADER_MIDDLEWARES = {
     # 这里是下载中间件
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'crawler.middlewares.RotateUserAgentMiddleware': 400,
+    'crawler.middlewares.CookiesSaveingMiddleware': 699,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,

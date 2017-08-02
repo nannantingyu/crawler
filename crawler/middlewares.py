@@ -9,6 +9,12 @@ import random
 import logging
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.conf import settings
+from scrapy.downloadermiddlewares.cookies import CookiesMiddleware
+from collections import defaultdict
+import re
+from scrapy.http.cookies import CookieJar
+import pickle
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -57,4 +63,42 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = settings.get('HTTP_PROXY')
-        
+
+class CookiesSaveingMiddleware(CookiesMiddleware):
+    def process_request(self, request, spider):
+        if request.meta.get('dont_merge_cookies', False):
+            return
+
+        cookiejarkey = request.meta.get("cookiejar")
+        jar = self.jars[cookiejarkey]
+
+        cookie_formater = "cookies/cookie_{key}.pkl"
+        cookies = {}
+
+        cookiejarkey = request.meta.get("cookiejar")
+        jar = self.jars[cookiejarkey]
+        for c in jar:
+            cookie_str = str(c)
+            r = re.compile(r"Cookie\s(\w+)=(\w+)\s(for\s)?(.+?)\/")
+            cookie_arr = r.findall(cookie_str)
+            if len(cookie_arr) > 0:
+                cookies[cookie_arr[0][0]] = cookie_arr[0][1]
+
+        for c in request.cookies:
+            cookies[c] = request.cookies[c]
+
+        file_cookie = {}
+        if os.path.exists(cookie_formater.format(key=cookiejarkey)):
+            with open(cookie_formater.format(key=cookiejarkey), 'rb') as fs:
+                file_cookie = pickle.load(fs)
+
+        if len(file_cookie) > 0:
+            file_cookie.update(cookies)
+        else:
+            file_cookie = cookies
+
+
+        with open(cookie_formater.format(key=cookiejarkey), 'wb') as fs:
+            pickle.dump(file_cookie, fs)
+
+        request.cookies = file_cookie

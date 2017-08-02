@@ -18,6 +18,7 @@ from crawler.models.crawl_monitor_stastic import MonitorStastic
 from crawler.models.crawl_monitor_type import MonitorType
 from crawler.models.crawl_province_time import ProvinceTime
 from crawler.models.crawl_type_time import TypeTime
+from crawler.models.crawl_baidu_tongji import BaiduTongji
 import crawler.items as items
 import datetime
 
@@ -41,6 +42,18 @@ def session_scope(session):
     finally:
         sess.close()
 
+class SqlReader(object):
+    def __init__(self):
+        engine = db_connect()
+        create_news_table(engine)
+        self.sess = sessionmaker(bind=engine)
+
+    def read_baidutongji_latest_time(self):
+        with session_scope(self.sess) as session:
+            query = session.query(BaiduTongji.access_time).order_by(BaiduTongji.access_time.desc()).limit(1).all()
+            return query
+
+
 class JianKongPipeline(object):
     """保存文章到数据库"""
 
@@ -59,6 +72,8 @@ class JianKongPipeline(object):
         if spider.name in ["jiankongbao", "jiankong-tongji"]:
             # 焦点新闻
             self.process_jiankongbao(item)
+        elif spider.name in ['baidu_tongji_nologin', 'baidu-tongji']:
+            self.process_baidutongji(item)
 
     def process_jiankongbao(self, item):
         if isinstance(item, items.ChinaTimeItem):
@@ -137,6 +152,70 @@ class JianKongPipeline(object):
                 all_items.append(TypeTime(**it))
             with session_scope(self.sess) as session:
                     session.add_all(all_items)
+    def process_baidutongji(self, item):
+        baiduTongji = BaiduTongji(**item)
+        with session_scope(self.sess) as session:
+            query = session.query(BaiduTongji.id).filter(and_(
+                BaiduTongji.user_id == baiduTongji.user_id,
+                BaiduTongji.access_time == baiduTongji.access_time
+            )).one_or_none()
+
+            if query is None:
+                session.add(baiduTongji)
+            else:
+                data = {}
+                if baiduTongji.area is not None:
+                    data['area'] = baiduTongji.area
+                if baiduTongji.keywords is not None:
+                    data['keywords'] = baiduTongji.keywords
+                if baiduTongji.entry_page is not None:
+                    data['entry_page'] = baiduTongji.entry_page
+                if baiduTongji.ip is not None:
+                    data['ip'] = baiduTongji.ip
+                if baiduTongji.visit_time is not None:
+                    data['visit_time'] = baiduTongji.visit_time
+                if baiduTongji.visit_pages is not None:
+                    data['visit_pages'] = baiduTongji.visit_pages
+                if baiduTongji.visitorType is not None:
+                    data['visitorType'] = baiduTongji.visitorType
+                if baiduTongji.visitorFrequency is not None:
+                    data['visitorFrequency'] = baiduTongji.visitorFrequency
+                if baiduTongji.lastVisitTime is not None:
+                    data['lastVisitTime'] = baiduTongji.lastVisitTime
+                if baiduTongji.endPage is not None:
+                    data['endPage'] = baiduTongji.endPage
+                if baiduTongji.deviceType is not None:
+                    data['deviceType'] = baiduTongji.deviceType
+                if baiduTongji.fromType is not None:
+                    data['fromType'] = baiduTongji.fromType
+                if baiduTongji.fromurl is not None:
+                    data['fromurl'] = baiduTongji.fromurl
+                if baiduTongji.fromAccount is not None:
+                    data['fromAccount'] = baiduTongji.fromAccount
+                if baiduTongji.isp is not None:
+                    data['isp'] = baiduTongji.isp
+                if baiduTongji.os is not None:
+                    data['os'] = baiduTongji.os
+                if baiduTongji.osType is not None:
+                    data['osType'] = baiduTongji.osType
+                if baiduTongji.browser is not None:
+                    data['browser'] = baiduTongji.browser
+                if baiduTongji.browserType is not None:
+                    data['browserType'] = baiduTongji.browserType
+                if baiduTongji.language is not None:
+                    data['language'] = baiduTongji.language
+                if baiduTongji.resolution is not None:
+                    data['resolution'] = baiduTongji.resolution
+                if baiduTongji.color is not None:
+                    data['color'] = baiduTongji.color
+                if baiduTongji.accessPage is not None:
+                    data['accessPage'] = baiduTongji.accessPage
+                if baiduTongji.antiCode is not None:
+                    data['antiCode'] = baiduTongji.antiCode
+
+                if data:
+                    session.query(BaiduTongji).filter(
+                        baiduTongji.id == query[0]).update(data)
 
     def close_spider(self, spider):
         """close spider"""

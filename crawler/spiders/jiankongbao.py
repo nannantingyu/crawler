@@ -10,9 +10,11 @@ sys.setdefaultencoding('utf8')
 import crawler.util as util
 from scrapy.http.cookies import CookieJar
 import Cookie
+import os
+import pickle
 
 class JiankongbaoSpider(scrapy.Spider):
-    handle_httpstatus_list = [404, 500]
+    handle_httpstatus_list = [404, 500, 302, 301]
     name = "jiankongbao"
     allowed_domains = ["jiankongbao.com"]
     start_urls = ['https://qiye.jiankongbao.com/']
@@ -23,35 +25,46 @@ class JiankongbaoSpider(scrapy.Spider):
     crawl_site = ["www.91pme.com", "m.91pme.com"]
     start_time = None
 
-    def __init__(self, category=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(JiankongbaoSpider, self).__init__(*args, **kwargs)
-        if kwargs:
+        if kwargs and "sites" in kwargs:
             sites = str(kwargs['sites']).split(",")
             if sites and len(sites) > 0:
                 self.crawl_site = sites
 
     def start_requests(self):
-        form_data = {
-            "email": "yangmingming@91guoxin.com",
-            "pwd": "1qaz2wsx",
-            "remember_me": "1",
-            "referer": "",
-        }
-
         self.start_time = datetime.datetime.now()
-        return [scrapy.FormRequest(
-            url="https://qiye.jiankongbao.com/jkb/account_dispose/signin/s",
-            formdata=form_data,
-            meta={"cookiejar": 1},
-            cookies={"page_rows": 50},
-            callback=self.loged_in
-        )]
+        #看用既有的cookie能否成功登录
+        return [scrapy.Request("https://qiye.jiankongbao.com/dashboard", meta={'cookiejar':self.name}, callback=self.checkState)]
+
+    def checkState(self, response):
+        if response.status == 302:
+            form_data = {
+                "email": "yangmingming@91guoxin.com",
+                "pwd": "1qaz2wsx",
+                "remember_me": "1",
+                "referer": "",
+            }
+
+            self.start_time = datetime.datetime.now()
+            yield scrapy.FormRequest(
+                url="https://qiye.jiankongbao.com/jkb/account_dispose/signin/s",
+                formdata=form_data,
+                meta={"cookiejar": self.name},
+                cookies={"page_rows": 50},
+                callback=self.loged_in
+            )
+        else:
+            yield scrapy.Request(
+                self.list_url.format(page=1, now=datetime.datetime.now().strftime("%Y-%m-%d")),
+                meta={'cookiejar': response.meta['cookiejar']}, cookies={"page_rows": 50}, callback=self.parse_list)
+
 
     def loged_in(self, response):
         logging.info("[crawl site] " + self.list_url.format(page=1, now=datetime.datetime.now().strftime("%Y-%m-%d")))
         yield scrapy.Request(
             self.list_url.format(page=1, now=datetime.datetime.now().strftime("%Y-%m-%d")),
-            meta={'cookiejar': response.meta['cookiejar']}, cookies={"page_rows":50}, callback=self.parse_list)
+            meta={'cookiejar': response.meta['cookiejar'], 'cookiesave':True}, cookies={"page_rows":50}, callback=self.parse_list)
 
     def parse_list(self, response):
         if self.list_page == 0:
@@ -68,6 +81,7 @@ class JiankongbaoSpider(scrapy.Spider):
             logging.info("[get site] " + title)
             if title in self.crawl_site:
                 self.site_maps[id] = title
+
 
         logging.info("[crawl site] " + 'https://qiye.jiankongbao.com/task_report_ajax.php?task_id={id}&sel_action=avail&is_world=china'.format(id=self.site_maps.keys()[self.index]))
         yield scrapy.Request(
