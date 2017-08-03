@@ -198,11 +198,11 @@ class BaiduTongjiSpider(scrapy.Spider):
                 item['ip'] = sub_detail[5]
 
                 if site_name == "mm.91pme.com":
-                    item['keywords'] = sub_detail[3]
-                    item['entry_page'] = sub_detail[4]
-                else:
                     item['keywords'] = sub_detail[4]
                     item['entry_page'] = sub_detail[3]
+                else:
+                    item['keywords'] = sub_detail[3]
+                    item['entry_page'] = sub_detail[4]
 
                 item['site'] = site_name
                 yield item
