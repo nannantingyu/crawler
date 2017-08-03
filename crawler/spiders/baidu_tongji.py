@@ -11,6 +11,7 @@ import urllib
 import time
 import datetime
 import json
+import re
 sys.setdefaultencoding('utf8')
 from crawler.items import BaiduTongjiItem
 from crawler.pipelines.database import SqlReader
@@ -25,6 +26,12 @@ class BaiduTongjiSpider(scrapy.Spider):
     verify_url = 'http://cas.baidu.com/?action=image&key={rand}'
     page_now = 1
     max_page = 51
+    sites_map = {
+        '8918649':{'name':'m.91pme.com', 'page_now':1},
+        '7802984':{'name':'91pme.com', 'page_now':1},
+        '8918810':{'name':'mm.91pme.com', 'page_now':1}
+    }
+
     formdata = {
         "siteId": "7802984",
         "order": "start_time,desc",
@@ -43,7 +50,10 @@ class BaiduTongjiSpider(scrapy.Spider):
         sql_reader = SqlReader()
         data = sql_reader.read_baidutongji_latest_time()
         if len(data) > 0:
-            self.lastest_access_time = datetime.datetime.strftime(data[0][0], "%Y/%m/%d %H:%I:%S")
+            self.lastest_access_time = {}
+            for s in data:
+                sname = 'default' if s[0] is None else s[0]
+                self.lastest_access_time[sname] = datetime.datetime.strftime(s[1], "%Y/%m/%d %H:%I:%S")
 
         # 看用既有的cookie能否成功登录
         return [scrapy.Request("https://tongji.baidu.com/web/24229627/trend/latest?siteId=8918649", meta={'cookiejar': self.name},
@@ -54,10 +64,20 @@ class BaiduTongjiSpider(scrapy.Spider):
             verify_url = self.verify_url.format(rand=random.randint(1500000000, 1511111111))
             yield scrapy.Request(verify_url, meta={'cookiejar': response.meta['cookiejar']}, callback=self.check_verify)
         else:
-            yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
-                                     meta={'cookiejar': self.name},
-                                     formdata=self.formdata,
-                                     callback=self.parseData)
+            for site in self.sites_map:
+                site_id = site
+                site_page = self.sites_map[site]['page_now']
+                offset = str((int(site_page) - 1) * 100)
+
+                form_dt = {}
+                form_dt.update(self.formdata)
+                form_dt['siteId'] = site_id
+                form_dt['offset'] = offset
+
+                yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
+                                         meta={'cookiejar': self.name, 'site_id': site_id},
+                                         formdata=form_dt,
+                                         callback=self.parseData)
 
     def check_verify(self, response):
         verify_img = "verify.jpg"
@@ -118,16 +138,31 @@ class BaiduTongjiSpider(scrapy.Spider):
                              meta={'cookiejar': response.meta['cookiejar']}, callback=self.parse_visit)
 
     def parse_visit(self, response):
-        yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
-                                   meta={'cookiejar': self.name},
-                                   formdata=self.formdata,
-                                   callback=self.parseData)
+        for site in self.sites_map:
+            site_id = self.sites_map[site]['id']
+            site_page = self.sites_map[site]['page_now']
+            offset = str((int(site_page)-1) * 100)
+
+            form_dt = {}
+            form_dt.update(self.formdata)
+            form_dt['siteId'] = site_id
+            form_dt['offset'] = offset
+
+            yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
+                                     meta={'cookiejar': self.name, 'site_id': site_id},
+                                     formdata=form_dt,
+                                     callback=self.parseData)
+
 
     def parseData(self, response):
-        with open("data.json", "w") as fb:
-            fb.write(response.body)
+        site_id = response.request.meta['site_id']
+        print site_id
 
-        print "crawl page ", self.page_now
+        site_name = self.sites_map[site_id]['name']
+        page_now = self.sites_map[site_id]['page_now']
+
+        logging.info('[crawl] site: ' + site_name + ', page_now: ' + str(page_now))
+
         json_data = json.loads(response.body)
         data = json_data['data']
         for index,item in enumerate(data['items'][0]):
@@ -153,7 +188,7 @@ class BaiduTongjiSpider(scrapy.Spider):
                 item['resolution'] = detail['resolution']
                 item['color'] = detail['color']
                 item['accessPage'] = detail['accessPage']
-                item['antiCode'] = detail['antiCode']
+                item['antiCode'] = detail['antiCode'] if "antiCode" in detail else ""
 
                 item['visit_pages'] = sub_detail[8]
                 item['access_time'] = sub_detail[0]
@@ -164,16 +199,22 @@ class BaiduTongjiSpider(scrapy.Spider):
                 item['entry_page'] = sub_detail[4]
                 item['ip'] = sub_detail[5]
 
+                item['site'] = site_name
                 yield item
 
         new_time = data['items'][1][0][0]
+        self.sites_map[site_id]['page_now'] += 1
+        print self.lastest_access_time
 
-        self.page_now += 1
-        if self.page_now < self.max_page and (self.lastest_access_time is None or new_time > self.lastest_access_time):
-            self.formdata['offset'] = str((self.page_now - 1) * 100)
+        if self.sites_map[site_id]['page_now'] < self.max_page and (self.lastest_access_time is None or site_name not in self.lastest_access_time or self.lastest_access_time[site_name] is None or new_time > self.lastest_access_time[site_name]):
+            form_dt = {}
+            form_dt.update(self.formdata)
+            form_dt['siteId'] = site_id
+            form_dt['offset'] = str((self.sites_map[site_id]['page_now'] - 1) * 100)
+
             yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
-                                   meta={'cookiejar': self.name},
-                                   formdata=self.formdata,
+                                   meta={'cookiejar': self.name, 'site_id': site_id},
+                                   formdata=form_dt,
                                    callback=self.parseData)
 
 

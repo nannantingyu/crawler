@@ -115,3 +115,4 @@ class BaiduTongjiItem(scrapy.Item):
     color = scrapy.Field()
     accessPage = scrapy.Field()
     antiCode = scrapy.Field()
+    site = scrapy.Field()

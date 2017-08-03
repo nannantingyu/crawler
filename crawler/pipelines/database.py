@@ -7,7 +7,7 @@
 import logging
 from contextlib import contextmanager
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 from crawler.models.util import db_connect, create_news_table
 from crawler.models.crawl_china_time import ChinaTime
 from crawler.models.crawl_error_top import ErrorTop
@@ -50,7 +50,7 @@ class SqlReader(object):
 
     def read_baidutongji_latest_time(self):
         with session_scope(self.sess) as session:
-            query = session.query(BaiduTongji.access_time).order_by(BaiduTongji.access_time.desc()).limit(1).all()
+            query = session.query(BaiduTongji.site, func.max(BaiduTongji.access_time).label('access_time')).group_by(BaiduTongji.site).all()
             return query
 
 

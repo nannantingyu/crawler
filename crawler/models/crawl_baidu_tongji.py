@@ -35,5 +35,6 @@ class BaiduTongji(Base):
     color = Column(String(32))
     accessPage = Column(String(255))
     antiCode = Column(String(32))
+    site = Column(String(64))
     created_time = Column(DateTime, default=func.now())
     updated_time = Column(DateTime, default=func.now(), onupdate=func.now())
