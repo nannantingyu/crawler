@@ -42,7 +42,8 @@ class BaiduTongjiSpider(scrapy.Spider):
     def start_requests(self):
         sql_reader = SqlReader()
         data = sql_reader.read_baidutongji_latest_time()
-        self.lastest_access_time = datetime.datetime.strftime(data[0][0], "%Y/%m/%d %H:%I:%S")
+        if len(data) > 0:
+            self.lastest_access_time = datetime.datetime.strftime(data[0][0], "%Y/%m/%d %H:%I:%S")
 
         # 看用既有的cookie能否成功登录
         return [scrapy.Request("https://tongji.baidu.com/web/24229627/trend/latest?siteId=8918649", meta={'cookiejar': self.name},
@@ -168,7 +169,7 @@ class BaiduTongjiSpider(scrapy.Spider):
         new_time = data['items'][1][0][0]
 
         self.page_now += 1
-        if self.page_now < self.max_page and new_time > self.lastest_access_time:
+        if self.page_now < self.max_page and (self.lastest_access_time is None or new_time > self.lastest_access_time):
             self.formdata['offset'] = str((self.page_now - 1) * 100)
             yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
                                    meta={'cookiejar': self.name},
