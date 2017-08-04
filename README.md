@@ -8,3 +8,6 @@
 
                 yum -y install python-image
                 pip install pytesseract
+4. 可以在命令中加 --logfile spider-name.log指定每一个spider的log文件
+    
+                scrapy crawl baidu-tongji --logfile ../logs/baidu-tongji.log
