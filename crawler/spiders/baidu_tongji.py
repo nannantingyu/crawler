@@ -15,6 +15,9 @@ import re
 sys.setdefaultencoding('utf8')
 from crawler.items import BaiduTongjiItem
 from crawler.pipelines.database import SqlReader
+import logging
+import logging
+from scrapy.utils.log import configure_logging
 pytesseract.pytesseract.tesseract_cmd = 'E:\\Tool\\Python\\Lib\\site-packages\\pytesser\\tesseract.exe'
 
 class BaiduTongjiSpider(scrapy.Spider):
@@ -31,6 +34,13 @@ class BaiduTongjiSpider(scrapy.Spider):
         '7802984':{'name':'91pme.com', 'page_now':1},
         '8918810':{'name':'mm.91pme.com', 'page_now':1}
     }
+
+    configure_logging(install_root_handler=False)
+    logging.basicConfig(
+        filename='../logs/'+name+'.log',
+        format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+        level=logging.INFO
+    )
 
     formdata = {
         "siteId": "7802984",
@@ -53,7 +63,7 @@ class BaiduTongjiSpider(scrapy.Spider):
             self.lastest_access_time = {}
             for s in data:
                 sname = 'default' if s[0] is None else s[0]
-                self.lastest_access_time[sname] = datetime.datetime.strftime(s[1], "%Y/%m/%d %H:%I:%S")
+                self.lastest_access_time[sname] = datetime.datetime.strftime(s[1], "%Y/%m/%d %H:%M:%S")
 
         # 看用既有的cookie能否成功登录
         return [scrapy.Request("https://tongji.baidu.com/web/24229627/trend/latest?siteId=8918649", meta={'cookiejar': self.name},
@@ -156,8 +166,6 @@ class BaiduTongjiSpider(scrapy.Spider):
 
     def parseData(self, response):
         site_id = response.request.meta['site_id']
-        print site_id
-
         site_name = self.sites_map[site_id]['name']
         page_now = self.sites_map[site_id]['page_now']
 
@@ -209,9 +217,12 @@ class BaiduTongjiSpider(scrapy.Spider):
 
         new_time = data['items'][1][0][0]
         self.sites_map[site_id]['page_now'] += 1
-        print self.lastest_access_time
 
-        if self.sites_map[site_id]['page_now'] < self.max_page and (self.lastest_access_time is None or site_name not in self.lastest_access_time or self.lastest_access_time[site_name] is None or new_time > self.lastest_access_time[site_name]):
+        if self.sites_map[site_id]['page_now'] < self.max_page and\
+                (self.lastest_access_time is None or site_name not in self.lastest_access_time
+                 or self.lastest_access_time[site_name] is None or
+                         new_time > self.lastest_access_time[site_name]):
+            print new_time, self.lastest_access_time[site_name], site_name, page_now
             form_dt = {}
             form_dt.update(self.formdata)
             form_dt['siteId'] = site_id
