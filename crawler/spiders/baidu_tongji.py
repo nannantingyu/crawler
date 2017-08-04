@@ -16,7 +16,6 @@ sys.setdefaultencoding('utf8')
 from crawler.items import BaiduTongjiItem
 from crawler.pipelines.database import SqlReader
 import logging
-import logging
 from scrapy.utils.log import configure_logging
 pytesseract.pytesseract.tesseract_cmd = 'E:\\Tool\\Python\\Lib\\site-packages\\pytesser\\tesseract.exe'
 
@@ -35,12 +34,9 @@ class BaiduTongjiSpider(scrapy.Spider):
         '8918810':{'name':'mm.91pme.com', 'page_now':1}
     }
 
-    configure_logging(install_root_handler=False)
-    logging.basicConfig(
-        filename='../logs/'+name+'.log',
-        format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
-        level=logging.INFO
-    )
+    custom_settings = {
+        'LOG_FILE': '../logs/baidu_tongji_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
+    }
 
     formdata = {
         "siteId": "7802984",
@@ -170,69 +166,71 @@ class BaiduTongjiSpider(scrapy.Spider):
         page_now = self.sites_map[site_id]['page_now']
 
         logging.info('[crawl] site: ' + site_name + ', page_now: ' + str(page_now))
+        try:
+            json_data = json.loads(response.body)
+            data = json_data['data']
+            for index,item in enumerate(data['items'][0]):
+                for jindex, subitem in enumerate(item):
+                    item = BaiduTongjiItem()
+                    detail = subitem['detail']
+                    sub_detail = data['items'][1][index]
 
-        json_data = json.loads(response.body)
-        data = json_data['data']
-        for index,item in enumerate(data['items'][0]):
-            for jindex, subitem in enumerate(item):
-                item = BaiduTongjiItem()
-                detail = subitem['detail']
-                sub_detail = data['items'][1][index]
+                    item['visitorType'] = detail['visitorType']
+                    item['visitorFrequency'] = detail['visitorFrequency']
+                    item['lastVisitTime'] = detail['lastVisitTime']
+                    item['endPage'] = detail['endPage']
+                    item['deviceType'] = detail['deviceType']
+                    item['fromType'] = detail['fromType']['fromType'] if 'fromType' in detail['fromType'] else ""
+                    item['fromurl'] = detail['fromType']['url'] if 'url' in detail['fromType'] else ""
+                    item['fromAccount'] = detail['fromType']['fromAccount'] if 'fromAccount' in detail['fromType'] else ""
+                    item['isp'] = detail['isp']
+                    item['os'] = detail['os']
+                    item['osType'] = detail['osType']
+                    item['browser'] = detail['browser']
+                    item['browserType'] = detail['browserType']
+                    item['language'] = detail['language']
+                    item['resolution'] = detail['resolution']
+                    item['color'] = detail['color']
+                    item['accessPage'] = detail['accessPage']
+                    item['antiCode'] = detail['antiCode'] if "antiCode" in detail else ""
 
-                item['visitorType'] = detail['visitorType']
-                item['visitorFrequency'] = detail['visitorFrequency']
-                item['lastVisitTime'] = detail['lastVisitTime']
-                item['endPage'] = detail['endPage']
-                item['deviceType'] = detail['deviceType']
-                item['fromType'] = detail['fromType']['fromType'] if 'fromType' in detail['fromType'] else ""
-                item['fromurl'] = detail['fromType']['url'] if 'url' in detail['fromType'] else ""
-                item['fromAccount'] = detail['fromType']['fromAccount'] if 'fromAccount' in detail['fromType'] else ""
-                item['isp'] = detail['isp']
-                item['os'] = detail['os']
-                item['osType'] = detail['osType']
-                item['browser'] = detail['browser']
-                item['browserType'] = detail['browserType']
-                item['language'] = detail['language']
-                item['resolution'] = detail['resolution']
-                item['color'] = detail['color']
-                item['accessPage'] = detail['accessPage']
-                item['antiCode'] = detail['antiCode'] if "antiCode" in detail else ""
+                    item['visit_pages'] = sub_detail[8]
+                    item['access_time'] = sub_detail[0]
+                    item['user_id'] = sub_detail[6]
+                    item['visit_time'] = sub_detail[7]
+                    item['area'] = sub_detail[1]
+                    item['ip'] = sub_detail[5]
 
-                item['visit_pages'] = sub_detail[8]
-                item['access_time'] = sub_detail[0]
-                item['user_id'] = sub_detail[6]
-                item['visit_time'] = sub_detail[7]
-                item['area'] = sub_detail[1]
-                item['ip'] = sub_detail[5]
+                    if site_name == "mm.91pme.com":
+                        item['keywords'] = sub_detail[4]
+                        item['entry_page'] = sub_detail[3]
+                    else:
+                        item['keywords'] = sub_detail[3]
+                        item['entry_page'] = sub_detail[4]
 
-                if site_name == "mm.91pme.com":
-                    item['keywords'] = sub_detail[4]
-                    item['entry_page'] = sub_detail[3]
-                else:
-                    item['keywords'] = sub_detail[3]
-                    item['entry_page'] = sub_detail[4]
+                    item['site'] = site_name
+                    yield item
 
-                item['site'] = site_name
-                yield item
+            new_time = data['items'][1][0][0]
+            self.sites_map[site_id]['page_now'] += 1
 
-        new_time = data['items'][1][0][0]
-        self.sites_map[site_id]['page_now'] += 1
+        except Exception as e:
+            print e
+        finally:
+            if self.sites_map[site_id]['page_now'] < self.max_page and\
+                    (self.lastest_access_time is None or site_name not in self.lastest_access_time
+                     or self.lastest_access_time[site_name] is None or
+                             new_time > self.lastest_access_time[site_name]):
+                print new_time, self.lastest_access_time[site_name], site_name, page_now
+                form_dt = {}
+                form_dt.update(self.formdata)
+                form_dt['siteId'] = site_id
+                form_dt['offset'] = str((self.sites_map[site_id]['page_now'] - 1) * 100)
 
-        if self.sites_map[site_id]['page_now'] < self.max_page and\
-                (self.lastest_access_time is None or site_name not in self.lastest_access_time
-                 or self.lastest_access_time[site_name] is None or
-                         new_time > self.lastest_access_time[site_name]):
-            print new_time, self.lastest_access_time[site_name], site_name, page_now
-            form_dt = {}
-            form_dt.update(self.formdata)
-            form_dt['siteId'] = site_id
-            form_dt['offset'] = str((self.sites_map[site_id]['page_now'] - 1) * 100)
-
-            yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
-                                   meta={'cookiejar': self.name, 'site_id': site_id},
-                                   formdata=form_dt,
-                                   callback=self.parseData)
-
+                yield scrapy.FormRequest(url="https://tongji.baidu.com/web/24229627/ajax/post",
+                                       meta={'cookiejar': self.name, 'site_id': site_id},
+                                       formdata=form_dt,
+                                       callback=self.parseData)
 
 
 def parse_verify(name):

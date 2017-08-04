@@ -4,14 +4,10 @@ import json
 import crawler.items as items
 import sys
 import datetime
-import logging
 reload(sys)
 sys.setdefaultencoding('utf8')
-import crawler.util as util
-from scrapy.http.cookies import CookieJar
-import Cookie
-import os
-import pickle
+import logging
+from scrapy.utils.log import configure_logging
 
 class JiankongbaoSpider(scrapy.Spider):
     handle_httpstatus_list = [404, 500, 302, 301]
@@ -24,6 +20,10 @@ class JiankongbaoSpider(scrapy.Spider):
     list_url = "https://qiye.jiankongbao.com/ajax_wrapper.php?command=get_task_list_page&type=&owner=&priority=&class_id=&status=&temp=task_list_main&page={page}&s=&domain_id=&period=today&range={now},{now}&m_page=undefined&ent_node_id=&search_status=&cache=71014"
     crawl_site = ["www.91pme.com", "m.91pme.com"]
     start_time = None
+
+    custom_settings = {
+        'LOG_FILE': '../logs/jiankongbao_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
+    }
 
     def __init__(self, *args, **kwargs):
         super(JiankongbaoSpider, self).__init__(*args, **kwargs)

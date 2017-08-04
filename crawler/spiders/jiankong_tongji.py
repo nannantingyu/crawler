@@ -20,6 +20,9 @@ class JiankongTongjiSpider(scrapy.Spider):
     list_url = "https://qiye.jiankongbao.com/ajax_wrapper.php?command=get_task_list_page&type=&owner=&priority=&class_id=&status=&temp=task_list_main&page={page}&s=&domain_id=&period=today&range={now},{now}&m_page=undefined&ent_node_id=&search_status=&cache=71014"
     crawl_site = ["www.91pme.com", "m.91pme.com"]
     start_time = None
+    custom_settings = {
+        'LOG_FILE': '../logs/jiankongbao_tongji_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
+    }
 
     def __init__(self, *args, **kwargs):
         super(JiankongTongjiSpider, self).__init__(*args, **kwargs)
