@@ -8,6 +8,7 @@ from crawler.items import CrawlEconomicCalendarItem
 from crawler.items import CrawlEconomicEventItem
 from crawler.items import CrawlEconomicHolidayItem
 import urllib
+import logging
 
 class CjCalendarSpider(scrapy.Spider):
     name = "cj-calendar"
@@ -39,6 +40,7 @@ class CjCalendarSpider(scrapy.Spider):
                              callback=self.parse_calendar)
 
     def parse_calendar(self, response):
+
         data = json.loads(response.body)
         all_data = {}
         all_index = 0
@@ -59,7 +61,7 @@ class CjCalendarSpider(scrapy.Spider):
             all_index += 1
 
         yield all_data
-
+        logging.info("[crawl] " + str(self.date_now.strftime("%Y-&m-%d")))
         with open("../tmp/calendar.log", 'a') as fs:
             fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
 
@@ -95,7 +97,6 @@ class CjCalendarSpider(scrapy.Spider):
         with open("../tmp/event.log", 'a') as fs:
             fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
 
-        print "https://rili.jin10.com/datas/{year}/{monthday}/event.json".format(year=self.date_now.year,monthday=self.date_now.strftime("%m%d"))
         yield scrapy.Request("https://rili.jin10.com/datas/{year}/{monthday}/holiday.json".format(year=self.date_now.year,
                                                                                                 monthday=self.date_now.strftime("%m%d")),
                              meta={"cookiejar": response.meta['cookiejar'],
@@ -103,11 +104,9 @@ class CjCalendarSpider(scrapy.Spider):
                              callback=self.parse_holiday)
 
     def parse_holiday(self, response):
-        print 12312321
         data = json.loads(response.body)
         all_data = {}
         all_index = 0
-        print data
         for dt in data:
             item = CrawlEconomicHolidayItem()
             item['time'] = dt['date'][0:10]

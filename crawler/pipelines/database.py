@@ -246,69 +246,75 @@ class JianKongPipeline(object):
             with session_scope(self.sess) as session:
                     session.add_all(all_items)
     def process_baidutongji(self, item):
-        baiduTongji = BaiduTongji(**item)
+        all_data = []
         with session_scope(self.sess) as session:
-            query = session.query(BaiduTongji.id).filter(and_(
-                BaiduTongji.user_id == baiduTongji.user_id,
-                BaiduTongji.access_time == baiduTongji.access_time
-            )).one_or_none()
+            for ditem in item:
+                baiduTongji = BaiduTongji(**item[ditem])
 
-            if query is None:
-                session.add(baiduTongji)
-            else:
-                data = {}
-                if baiduTongji.area is not None:
-                    data['area'] = baiduTongji.area
-                if baiduTongji.keywords is not None:
-                    data['keywords'] = baiduTongji.keywords
-                if baiduTongji.entry_page is not None:
-                    data['entry_page'] = baiduTongji.entry_page
-                if baiduTongji.ip is not None:
-                    data['ip'] = baiduTongji.ip
-                if baiduTongji.visit_time is not None:
-                    data['visit_time'] = baiduTongji.visit_time
-                if baiduTongji.visit_pages is not None:
-                    data['visit_pages'] = baiduTongji.visit_pages
-                if baiduTongji.visitorType is not None:
-                    data['visitorType'] = baiduTongji.visitorType
-                if baiduTongji.visitorFrequency is not None:
-                    data['visitorFrequency'] = baiduTongji.visitorFrequency
-                if baiduTongji.lastVisitTime is not None:
-                    data['lastVisitTime'] = baiduTongji.lastVisitTime
-                if baiduTongji.endPage is not None:
-                    data['endPage'] = baiduTongji.endPage
-                if baiduTongji.deviceType is not None:
-                    data['deviceType'] = baiduTongji.deviceType
-                if baiduTongji.fromType is not None:
-                    data['fromType'] = baiduTongji.fromType
-                if baiduTongji.fromurl is not None:
-                    data['fromurl'] = baiduTongji.fromurl
-                if baiduTongji.fromAccount is not None:
-                    data['fromAccount'] = baiduTongji.fromAccount
-                if baiduTongji.isp is not None:
-                    data['isp'] = baiduTongji.isp
-                if baiduTongji.os is not None:
-                    data['os'] = baiduTongji.os
-                if baiduTongji.osType is not None:
-                    data['osType'] = baiduTongji.osType
-                if baiduTongji.browser is not None:
-                    data['browser'] = baiduTongji.browser
-                if baiduTongji.browserType is not None:
-                    data['browserType'] = baiduTongji.browserType
-                if baiduTongji.language is not None:
-                    data['language'] = baiduTongji.language
-                if baiduTongji.resolution is not None:
-                    data['resolution'] = baiduTongji.resolution
-                if baiduTongji.color is not None:
-                    data['color'] = baiduTongji.color
-                if baiduTongji.accessPage is not None:
-                    data['accessPage'] = baiduTongji.accessPage
-                if baiduTongji.antiCode is not None:
-                    data['antiCode'] = baiduTongji.antiCode
+                query = session.query(BaiduTongji.id).filter(and_(
+                    BaiduTongji.user_id == baiduTongji.user_id,
+                    BaiduTongji.access_time == baiduTongji.access_time
+                )).one_or_none()
 
-                if data:
-                    session.query(BaiduTongji).filter(
-                        baiduTongji.id == query[0]).update(data)
+                if query is None:
+                    all_data.append(baiduTongji)
+                else:
+                    data = {}
+                    if baiduTongji.area is not None:
+                        data['area'] = baiduTongji.area
+                    if baiduTongji.keywords is not None:
+                        data['keywords'] = baiduTongji.keywords
+                    if baiduTongji.entry_page is not None:
+                        data['entry_page'] = baiduTongji.entry_page
+                    if baiduTongji.ip is not None:
+                        data['ip'] = baiduTongji.ip
+                    if baiduTongji.visit_time is not None:
+                        data['visit_time'] = baiduTongji.visit_time
+                    if baiduTongji.visit_pages is not None:
+                        data['visit_pages'] = baiduTongji.visit_pages
+                    if baiduTongji.visitorType is not None:
+                        data['visitorType'] = baiduTongji.visitorType
+                    if baiduTongji.visitorFrequency is not None:
+                        data['visitorFrequency'] = baiduTongji.visitorFrequency
+                    if baiduTongji.lastVisitTime is not None:
+                        data['lastVisitTime'] = baiduTongji.lastVisitTime
+                    if baiduTongji.endPage is not None:
+                        data['endPage'] = baiduTongji.endPage
+                    if baiduTongji.deviceType is not None:
+                        data['deviceType'] = baiduTongji.deviceType
+                    if baiduTongji.fromType is not None:
+                        data['fromType'] = baiduTongji.fromType
+                    if baiduTongji.fromurl is not None:
+                        data['fromurl'] = baiduTongji.fromurl
+                    if baiduTongji.fromAccount is not None:
+                        data['fromAccount'] = baiduTongji.fromAccount
+                    if baiduTongji.isp is not None:
+                        data['isp'] = baiduTongji.isp
+                    if baiduTongji.os is not None:
+                        data['os'] = baiduTongji.os
+                    if baiduTongji.osType is not None:
+                        data['osType'] = baiduTongji.osType
+                    if baiduTongji.browser is not None:
+                        data['browser'] = baiduTongji.browser
+                    if baiduTongji.browserType is not None:
+                        data['browserType'] = baiduTongji.browserType
+                    if baiduTongji.language is not None:
+                        data['language'] = baiduTongji.language
+                    if baiduTongji.resolution is not None:
+                        data['resolution'] = baiduTongji.resolution
+                    if baiduTongji.color is not None:
+                        data['color'] = baiduTongji.color
+                    if baiduTongji.accessPage is not None:
+                        data['accessPage'] = baiduTongji.accessPage
+                    if baiduTongji.antiCode is not None:
+                        data['antiCode'] = baiduTongji.antiCode
+
+                    if data:
+                        session.query(BaiduTongji).filter(
+                            baiduTongji.id == query[0]).update(data)
+
+            if len(all_data) > 0:
+                session.add_all(all_data)
 
     def close_spider(self, spider):
         """close spider"""

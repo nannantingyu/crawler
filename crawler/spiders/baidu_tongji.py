@@ -144,9 +144,8 @@ class BaiduTongjiSpider(scrapy.Spider):
                              meta={'cookiejar': response.meta['cookiejar']}, callback=self.parse_visit)
 
     def parse_visit(self, response):
-        for site in self.sites_map:
-            site_id = self.sites_map[site]['id']
-            site_page = self.sites_map[site]['page_now']
+        for site_id in self.sites_map:
+            site_page = self.sites_map[site_id]['page_now']
             offset = str((int(site_page)-1) * 100)
 
             form_dt = {}
@@ -166,9 +165,11 @@ class BaiduTongjiSpider(scrapy.Spider):
         page_now = self.sites_map[site_id]['page_now']
 
         logging.info('[crawl] site: ' + site_name + ', page_now: ' + str(page_now))
+        new_time = None
         try:
             json_data = json.loads(response.body)
             data = json_data['data']
+            all_data = {}
             for index,item in enumerate(data['items'][0]):
                 for jindex, subitem in enumerate(item):
                     item = BaiduTongjiItem()
@@ -209,8 +210,9 @@ class BaiduTongjiSpider(scrapy.Spider):
                         item['entry_page'] = sub_detail[4]
 
                     item['site'] = site_name
-                    yield item
+                    all_data[jindex] = item
 
+            yield all_data
             new_time = data['items'][1][0][0]
             self.sites_map[site_id]['page_now'] += 1
 
@@ -221,7 +223,8 @@ class BaiduTongjiSpider(scrapy.Spider):
                     (self.lastest_access_time is None or site_name not in self.lastest_access_time
                      or self.lastest_access_time[site_name] is None or
                              new_time > self.lastest_access_time[site_name]):
-                print new_time, self.lastest_access_time[site_name], site_name, page_now
+                if self.lastest_access_time is not None:
+                    print new_time, self.lastest_access_time[site_name], site_name, page_now
                 form_dt = {}
                 form_dt.update(self.formdata)
                 form_dt['siteId'] = site_id
