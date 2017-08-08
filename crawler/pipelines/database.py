@@ -19,6 +19,9 @@ from crawler.models.crawl_monitor_type import MonitorType
 from crawler.models.crawl_province_time import ProvinceTime
 from crawler.models.crawl_type_time import TypeTime
 from crawler.models.crawl_baidu_tongji import BaiduTongji
+from crawler.models.crawl_economic_calendar import CrawlEconomicCalendar
+from crawler.models.crawl_economic_event import CrawlEconomicEvent
+from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
 import crawler.items as items
 import datetime
 
@@ -74,6 +77,96 @@ class JianKongPipeline(object):
             self.process_jiankongbao(item)
         elif spider.name in ['baidu_tongji_nologin', 'baidu-tongji']:
             self.process_baidutongji(item)
+        elif spider.name in ['cj-calendar']:
+            self.parse_calendar(item)
+
+    def parse_calendar(self, item):
+        if item and len(item) > 0:
+            if isinstance(item[0], items.CrawlEconomicCalendarItem):
+                with session_scope(self.sess) as session:
+                    all_data = []
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlEconomicCalendar = CrawlEconomicCalendar(**ditem)
+
+                        query = session.query(CrawlEconomicCalendar.id).filter(and_(
+                            CrawlEconomicCalendar.source_id == crawlEconomicCalendar.source_id,
+                            CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query is not None:
+                            data = {}
+                            if crawlEconomicCalendar.country is not None:
+                                data['country'] = crawlEconomicCalendar.country
+                            if crawlEconomicCalendar.quota_name is not None:
+                                data['quota_name'] = crawlEconomicCalendar.quota_name
+                            if crawlEconomicCalendar.importance is not None:
+                                data['importance'] = crawlEconomicCalendar.importance
+                            if crawlEconomicCalendar.former_value is not None:
+                                data['former_value'] = crawlEconomicCalendar.former_value
+                            if crawlEconomicCalendar.predicted_value is not None:
+                                data['predicted_value'] = crawlEconomicCalendar.predicted_value
+                            if crawlEconomicCalendar.published_value is not None:
+                                data['published_value'] = crawlEconomicCalendar.published_value
+                            if crawlEconomicCalendar.influence is not None:
+                                data['influence'] = crawlEconomicCalendar.influence
+                            if crawlEconomicCalendar.next_pub_time is not None:
+                                data['next_pub_time'] = crawlEconomicCalendar.next_pub_time
+                            if crawlEconomicCalendar.pub_agent is not None:
+                                data['pub_agent'] = crawlEconomicCalendar.pub_agent
+                            if crawlEconomicCalendar.pub_frequency is not None:
+                                data['pub_frequency'] = crawlEconomicCalendar.pub_frequency
+                            if crawlEconomicCalendar.count_way is not None:
+                                data['count_way'] = crawlEconomicCalendar.count_way
+                            if crawlEconomicCalendar.data_influence is not None:
+                                data['data_influence'] = crawlEconomicCalendar.data_influence
+                            if crawlEconomicCalendar.data_define is not None:
+                                data['data_define'] = crawlEconomicCalendar.data_define
+                            if crawlEconomicCalendar.funny_read is not None:
+                                data['funny_read'] = crawlEconomicCalendar.funny_read
+
+                            if data:
+                                session.query(CrawlEconomicCalendar).filter(
+                                    CrawlEconomicCalendar.id == query[0]).update(data)
+
+                        else:
+                            all_data.append(crawlEconomicCalendar)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+            elif isinstance(item[0], items.CrawlEconomicEventItem):
+                all_data = []
+
+                with session_scope(self.sess) as session:
+                    crawlEconomicEvent = CrawlEconomicEvent(**item[0])
+                    session.query(CrawlEconomicEvent).filter(
+                        CrawlEconomicEvent.date == crawlEconomicEvent.date).delete()
+
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlEconomicEvent = CrawlEconomicEvent(**ditem)
+                        all_data.append(crawlEconomicEvent)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+            elif isinstance(item[0], items.CrawlEconomicHolidayItem):
+                all_data = []
+
+                with session_scope(self.sess) as session:
+                    crawlEconomicHoliday = CrawlEconomicHoliday(**item[0])
+                    session.query(CrawlEconomicHoliday).filter(CrawlEconomicHoliday.date == crawlEconomicHoliday.date).delete()
+
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlEconomicHoliday = CrawlEconomicHoliday(**ditem)
+                        all_data.append(crawlEconomicHoliday)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+
 
     def process_jiankongbao(self, item):
         if isinstance(item, items.ChinaTimeItem):

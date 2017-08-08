@@ -116,3 +116,40 @@ class BaiduTongjiItem(scrapy.Item):
     accessPage = scrapy.Field()
     antiCode = scrapy.Field()
     site = scrapy.Field()
+
+class CrawlEconomicCalendarItem(scrapy.Item):
+    """金10财经日历"""
+    country = scrapy.Field()
+    quota_name = scrapy.Field()
+    pub_time = scrapy.Field()
+    importance = scrapy.Field()
+    former_value = scrapy.Field()
+    predicted_value = scrapy.Field()
+    published_value = scrapy.Field()
+    influence = scrapy.Field()
+    source_id = scrapy.Field()
+    next_pub_time = scrapy.Field()
+    pub_agent = scrapy.Field()
+    pub_frequency = scrapy.Field()
+    count_way = scrapy.Field()
+    data_influence = scrapy.Field()
+    data_define = scrapy.Field()
+    funny_read = scrapy.Field()
+
+class CrawlEconomicEventItem(scrapy.Item):
+    """金10财经事件"""
+    time = scrapy.Field()
+    country = scrapy.Field()
+    city = scrapy.Field()
+    importance = scrapy.Field()
+    event = scrapy.Field()
+    date = scrapy.Field()
+
+class CrawlEconomicHolidayItem(scrapy.Item):
+    """金10财经假期"""
+    time = scrapy.Field()
+    country = scrapy.Field()
+    market = scrapy.Field()
+    holiday_name = scrapy.Field()
+    detail = scrapy.Field()
+    date = scrapy.Field()
