@@ -20,6 +20,7 @@ class CjCalendarSpider(scrapy.Spider):
     date_end = None
     all_data = []
     jiedu_index = 0
+    jiedu = None
 
     custom_settings = {
         'LOG_FILE': '../logs/jin10_cj_calendar_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
@@ -48,6 +49,9 @@ class CjCalendarSpider(scrapy.Spider):
                     self.after_days = int(params['after'])
                 except ValueError as err:
                     print params['after'] + ' 不是正确的向后抓取天数，已默认抓取今天之后60天的数据'
+
+            if "jiedu" in params:
+                self.jiedu = params['jiedu']
 
             if self.max_days is not None:
                 date_diff = datetime.timedelta(days=int(self.max_days))
@@ -158,7 +162,6 @@ class CjCalendarSpider(scrapy.Spider):
         dtadd = datetime.timedelta(days=1)
         self.date_now = self.date_now + dtadd
 
-        print self.date_now, self.date_end
         if self.date_now < self.date_end:
             yield scrapy.Request(
                 'https://rili.jin10.com/datas/{year}/{monthday}/economics.json'.format(year=self.date_now.year,
@@ -167,14 +170,20 @@ class CjCalendarSpider(scrapy.Spider):
                 meta={"cookiejar": response.meta['cookiejar'],
                       'dont_redirect': True},
                 callback=self.parse_calendar)
-        elif len(self.all_data) > 0:
-            dataid = self.all_data[self.jiedu_index]['dataid']
-            pub_time = self.all_data[self.jiedu_index]['pub_time']
-            yield scrapy.Request(
-                'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}'.format(dataid=dataid,
-                                                                                            pubtime=pub_time),
-                meta={"cookiejar": response.meta['cookiejar'], 'dont_redirect': True},
-                callback=self.parse_jiedu)
+        elif len(self.all_data) > 0 and self.jiedu is not None:
+            # now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # for i in range(0, len(self.all_data)):
+            #     if self.all_data[i]['pub_time'] < now:
+            #         self.jiedu_index += 1
+
+            if self.jiedu_index < len(self.all_data):
+                dataid = self.all_data[self.jiedu_index]['dataid']
+                pub_time = self.all_data[self.jiedu_index]['pub_time']
+                yield scrapy.Request(
+                    'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}'.format(dataid=dataid,
+                                                                                                pubtime=pub_time),
+                    meta={"cookiejar": response.meta['cookiejar'], 'dont_redirect': True},
+                    callback=self.parse_jiedu)
 
     def parse_jiedu(self, response):
         url = response.url
