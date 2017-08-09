@@ -14,7 +14,9 @@ class CjCalendarSpider(scrapy.Spider):
     name = "cj-calendar"
     allowed_domains = ["jin10.com"]
     start_urls = ['https://rili.jin10.com/']
-    date_now = datetime.datetime(1997, 8, 1, 0, 0, 0)
+    date_now = datetime.datetime.now()
+    max_days = None
+    after_days = 60
     date_end = None
     all_data = []
     jiedu_index = 0
@@ -23,9 +25,38 @@ class CjCalendarSpider(scrapy.Spider):
         'LOG_FILE': '../logs/jin10_cj_calendar_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
     }
 
+    def __init__(self, *args, **kwargs):
+        super(CjCalendarSpider, self).__init__(*args, **kwargs)
+        if 'args' in kwargs:
+            params = {x[0]:x[1] for x in [[l for l in m.split(":")] for m in kwargs['args'].split(",")]}
+
+            if "start" in params:
+                try:
+                    date_start = datetime.datetime.strptime(params['start'], "%Y-%m-%d")
+                    self.date_now = date_start
+                except ValueError as error:
+                    print params['start'] + ' 不是正确格式的时间，已默认从今天开始抓取'
+
+            if "max" in params:
+                try:
+                    self.max_days = int(params['max'])
+                except ValueError as err:
+                    print params['max'] + ' 不是正确的抓取天数，已默认抓取全部数据'
+
+            if "after" in params:
+                try:
+                    self.after_days = int(params['after'])
+                except ValueError as err:
+                    print params['after'] + ' 不是正确的向后抓取天数，已默认抓取今天之后60天的数据'
+
+            if self.max_days is not None:
+                date_diff = datetime.timedelta(days=int(self.max_days))
+                self.date_end = self.date_now + date_diff
+            else:
+                date_diff = datetime.timedelta(days=int(self.after_days))
+                self.date_end = datetime.datetime.now() + date_diff
+
     def start_requests(self):
-        date_diff = datetime.timedelta(days=60)
-        self.date_end = datetime.datetime.now() + date_diff
         return [scrapy.Request("https://rili.jin10.com/", meta={'cookiejar': self.name},
                                callback=self.parse_cookie)]
 
@@ -61,7 +92,7 @@ class CjCalendarSpider(scrapy.Spider):
             all_index += 1
 
         yield all_data
-        logging.info("[crawl] " + str(self.date_now.strftime("%Y-&m-%d")))
+        logging.info("[crawl] " + str(self.date_now.strftime("%Y-%m-%d")))
         with open("../tmp/calendar.log", 'a') as fs:
             fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
 
@@ -127,6 +158,7 @@ class CjCalendarSpider(scrapy.Spider):
         dtadd = datetime.timedelta(days=1)
         self.date_now = self.date_now + dtadd
 
+        print self.date_now, self.date_end
         if self.date_now < self.date_end:
             yield scrapy.Request(
                 'https://rili.jin10.com/datas/{year}/{monthday}/economics.json'.format(year=self.date_now.year,
@@ -135,7 +167,7 @@ class CjCalendarSpider(scrapy.Spider):
                 meta={"cookiejar": response.meta['cookiejar'],
                       'dont_redirect': True},
                 callback=self.parse_calendar)
-        else:
+        elif len(self.all_data) > 0:
             dataid = self.all_data[self.jiedu_index]['dataid']
             pub_time = self.all_data[self.jiedu_index]['pub_time']
             yield scrapy.Request(
@@ -166,7 +198,7 @@ class CjCalendarSpider(scrapy.Spider):
         item['funny_read'] = data['focus']
         item['source_id'] = dataid
 
-        yield item
+        yield {0:item}
 
         self.jiedu_index += 1
         if self.jiedu_index < len(self.all_data):

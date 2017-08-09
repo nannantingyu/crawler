@@ -82,7 +82,7 @@ class JianKongPipeline(object):
 
     def parse_calendar(self, item):
         if item and len(item) > 0:
-            if isinstance(item[0], items.CrawlEconomicCalendarItem):
+            if 0 in item and isinstance(item[0], items.CrawlEconomicCalendarItem):
                 with session_scope(self.sess) as session:
                     all_data = []
                     for ditem in item:
@@ -135,7 +135,7 @@ class JianKongPipeline(object):
                     if len(all_data) > 0:
                         session.add_all(all_data)
 
-            elif isinstance(item[0], items.CrawlEconomicEventItem):
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicEventItem):
                 all_data = []
 
                 with session_scope(self.sess) as session:
@@ -151,7 +151,7 @@ class JianKongPipeline(object):
                     if len(all_data) > 0:
                         session.add_all(all_data)
 
-            elif isinstance(item[0], items.CrawlEconomicHolidayItem):
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicHolidayItem):
                 all_data = []
 
                 with session_scope(self.sess) as session:
