@@ -18,10 +18,10 @@
     2. 在这个文件中的self.spidercls.update_settings(self.settings)的下一行添加configure_logging(self.settings)
     3. 在每个spider中添加
 
-        class BaiduTongjiSpider(scrapy.Spider):
-            custom_settings = {
-                'LOG_FILE': '../logs/baidu_tongji_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
-            }
+            class BaiduTongjiSpider(scrapy.Spider):
+                custom_settings = {
+                    'LOG_FILE': '../logs/baidu_tongji_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
+                }
 
 5. scrapy crawl cj-calendar -a args=start:2015-02-02,after:30,max:100
         抓取jin10财经日历项目
