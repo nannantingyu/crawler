@@ -22,6 +22,7 @@ from crawler.models.crawl_baidu_tongji import BaiduTongji
 from crawler.models.crawl_economic_calendar import CrawlEconomicCalendar
 from crawler.models.crawl_economic_event import CrawlEconomicEvent
 from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
+from crawler.models.crawl_zhanzhang import CrawlZhanzhang
 import crawler.items as items
 import datetime
 
@@ -79,6 +80,13 @@ class JianKongPipeline(object):
             self.process_baidutongji(item)
         elif spider.name in ['cj-calendar']:
             self.parse_calendar(item)
+        elif spider.name in ['zhanzhang']:
+            self.parse_zhanzhang(item)
+
+    def parse_zhanzhang(self, item):
+        all_data = [CrawlZhanzhang(**item[it]) for it in item]
+        with session_scope(self.sess) as session:
+            session.add_all(all_data)
 
     def parse_calendar(self, item):
         if item and len(item) > 0:

@@ -153,3 +153,15 @@ class CrawlEconomicHolidayItem(scrapy.Item):
     holiday_name = scrapy.Field()
     detail = scrapy.Field()
     date = scrapy.Field()
+
+class ZhanzhangItem(scrapy.Item):
+    """站长之家seo"""
+    keywords = scrapy.Field()
+    total_index = scrapy.Field()
+    pc_index = scrapy.Field()
+    mobile_index = scrapy.Field()
+    baidu_index = scrapy.Field()
+    shoulu_count = scrapy.Field()
+    shoulu_page = scrapy.Field()
+    shoulu_title = scrapy.Field()
+    site = scrapy.Field()

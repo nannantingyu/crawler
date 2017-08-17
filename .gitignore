@@ -3,3 +3,12 @@
 logs/*.log
 .idea/
 crawler/out.txt
+crawler/bverify.jpg
+crawler/gverify.jpg
+crawler/data.json
+crawler/tesseract.log
+crawler/verify.jpg
+tmp/
+crawler/cookies/
+crawler/spiders/test.py
+crawler/spiders/pme.py
