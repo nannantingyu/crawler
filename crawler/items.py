@@ -165,3 +165,17 @@ class ZhanzhangItem(scrapy.Item):
     shoulu_page = scrapy.Field()
     shoulu_title = scrapy.Field()
     site = scrapy.Field()
+
+class ArticleItem(scrapy.Item):
+    """jin10文章"""
+    title = scrapy.Field()
+    body = scrapy.Field()
+    publish_time = scrapy.Field()
+    author = scrapy.Field()
+    description = scrapy.Field()
+    image = scrapy.Field()
+    type = scrapy.Field()
+    keywords = scrapy.Field()
+    source_id = scrapy.Field()
+    source_url = scrapy.Field()
+    source_site = scrapy.Field()

@@ -85,3 +85,10 @@ class ZhanzhangSpider(scrapy.Spider):
             yield scrapy.Request(self.url_format.format(page=self.page_index, site=self.allsite[self.site_index]),
                                    meta={'cookiejar': self.name},
                                    callback=self.count_page)
+
+
+def func():
+    [i, a, b] = [0, 1, 1]
+    while True:
+        [i, a, b] = [i+1, b, a+b]
+        yield b

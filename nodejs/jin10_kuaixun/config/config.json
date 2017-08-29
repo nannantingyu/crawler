@@ -1,0 +1,33 @@
+{
+  "mysql": {
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "abc123",
+    "database": "crawl"
+  },
+  "log4js": {
+    "appenders": {
+      "jin10": {
+        "type": "file",
+        "filename": "../logs/jin10.log"
+      }
+    },
+    "categories": {
+      "default": {
+        "appenders": [
+          "jin10"
+        ],
+        "level": "INFO"
+      }
+    }
+  },
+  "crawl": {
+    "download_dir": "../images/",
+    "yaml_dir": "../yaml/",
+    "yaml_root": "scsj.yml"
+  },
+  "redis": {
+    "server": "127.0.0.1",
+    "port": "6379"
+  }
+}
