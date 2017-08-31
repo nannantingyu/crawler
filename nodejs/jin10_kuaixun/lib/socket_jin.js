@@ -7,7 +7,8 @@ const io = require('socket.io-client'),
     root_path = path.dirname(__dirname),
     log4js = require('log4js'),
     request = require("request"),
-    redis = require('redis');
+    redis = require('redis'),
+    url = require('url');
 
 const config = require(path.join(root_path, "config/config")),
     serverArr = config.server_addr,
@@ -74,9 +75,8 @@ socket.on('user message', function (msg) {
     let now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     if (msg_0 == 1 || msg_0 == 0) {
-        let yaml_dir = path.join(config.crawl.yaml_dir, config.crawl.yaml_root);
+        let yaml_dir = path.join(config.crawl.yaml_dir, config.crawl.yaml_root), detail_dir = config.crawl.detail_dir;
         fs.readFile(yaml_dir, function(err, file_data){
-            console.log("get file, ", file_data);
             if(err) {
                 console.log("Read old json file err, ", err);
             }
@@ -120,7 +120,7 @@ socket.on('user message', function (msg) {
                 data['created_time'] = now;
                 data['updated_time'] = now;
 
-                let yaml_data = null;
+                let yaml_data = null, detail_temp = "";
                 if(msg_0 == 0) {
                     yaml_data = {
                         "tpl": 0,
@@ -142,6 +142,21 @@ socket.on('user message', function (msg) {
                         data['image'] = path.join(day_now, filename);
                         yaml_data['image'] = data['image'];
                     }
+
+                    //将详情页填到redis中
+                    if(keys_format.includes('more_link') && data['more_link']) {
+                        if(data['more_link'].includes('news.jin10'))
+                        {
+                            redis_client.zadd("detail_pages", 0, data['more_link']);
+                            id = querystring.parse(url.parse(data['more_link']).query)['id'];
+                            if(id) {
+                                yaml_data['id'] = id;
+                            }
+                        }
+                    }
+
+                    detail_temp = `---\ntitle: ${data['publish_time']}资讯\ndate: ${data['publish_time']}\nlayout: post-scsj\n---\n${data['body']}`;
+                    console.log(detail_temp);
                 }
                 else{
                     yaml_data = {
@@ -158,10 +173,13 @@ socket.on('user message', function (msg) {
                         "star": data['star'],
                         "id": data['dateid']
                     };
+
+                    let detail_body = `${data['real_time']} ${data['body']}\n重要程度: ${data['star']}\n前值: ${data['former_value']}\n预期值: ${data['predicted_value']}\n公布值: ${data['published_value']}\n对金银价格理论影响:${data['influnce']}\n公布时间: ${data['publish_time']}`;
+                    detail_temp = `---\ntitle: ${data['publish_time']}资讯\ndate: ${data['publish_time']}\nlayout: post-scsj\n---\n${detail_body}`;
                 }
 
                 old_data.push(yaml_data);
-                let json_string =  JSON.stringify(old_data);
+                let json_string =  JSON.stringify(old_data.reverse());
                 logger.info("开始写入文件，" + yaml_dir);
                 fs.writeFile(yaml_dir, json_string, function(err, data){
                     if(err) {
@@ -170,24 +188,31 @@ socket.on('user message', function (msg) {
                     else{
                         logger.info('yaml success' + data);
                     }
-                })
+                });
+
+                //写入详情
+                if(detail_temp){
+                    console.log(detail_dir);
+                    detail_dir = path.join(detail_dir, yaml_data.id + ".md")
+                    fs.writeFile(detail_dir, detail_temp, function(err, data){
+                        if(err) {
+                            logger.info('detail error' + err);
+                        }
+                        else{
+                            logger.info('detail success' + data);
+                        }
+                    });
+                }
+
                 let values = [];
                 Object.values(data).forEach(x=>(values.push("'"+x+"'")));
 
                 let insert_sql = `insert into crawl_jin10_kuaixun(${Object.keys(data).join(',')}) values(${values.join(',')})`;
                 mysqlconnection.query(insert_sql, function(err, rows, fields) {
-                    if (err) logger.error('error sql: ' + insert_sql);;
-                    logger.info("add one");
-
-                    //将详情页填到redis中
-                    if(keys_format.includes('more_link') && data['more_link']) {
-                        if(data['more_link'].includes('news.jin10'))
-                        {
-                            redis_client.zadd("detail_pages", 0, data['more_link']);
-                        }
+                    if (err) logger.error('error sql: ' + insert_sql);
+                    else{
+                        logger.info('插入数据成功, ' + insert_sql);
                     }
-
-                    logger.info('插入数据成功, ' + insert_sql);
                 });
             }
         });
