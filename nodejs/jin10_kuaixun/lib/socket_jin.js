@@ -161,12 +161,13 @@ socket.on('user message', function (msg) {
 
                 old_data.push(yaml_data);
                 let json_string =  JSON.stringify(old_data);
+                logger.info("开始写入文件，" + yaml_dir);
                 fs.writeFile(yaml_dir, json_string, function(err, data){
                     if(err) {
-                        console.log('yaml error', err);
+                        logger.info('yaml error' + err);
                     }
                     else{
-                        console.log('yaml success');
+                        logger.info('yaml success' + data);
                     }
                 })
                 let values = [];
@@ -175,7 +176,7 @@ socket.on('user message', function (msg) {
                 let insert_sql = `insert into crawl_jin10_kuaixun(${Object.keys(data).join(',')}) values(${values.join(',')})`;
                 mysqlconnection.query(insert_sql, function(err, rows, fields) {
                     if (err) logger.error('error sql: ' + insert_sql);;
-                    console.log("add one");
+                    logger.info("add one");
 
                     //将详情页填到redis中
                     if(keys_format.includes('more_link') && data['more_link']) {
@@ -195,7 +196,6 @@ socket.on('user message', function (msg) {
         let update_sql = `update crawl_jin10_kuaixun set body='${body}' where dateid='${dateid}';`;
         mysqlconnection.query(update_sql, function(err, rows, fields) {
             if (err) throw err;
-            console.log("add one");
             logger.info('更新数据成功, ' + update_sql);
         });
     }
@@ -205,17 +205,14 @@ socket.on('user message', function (msg) {
         mysqlconnection.query(update_sql, function(err, rows, fields) {
             if (err) throw err;
             logger.info('更新数据成功, ' + update_sql);
-            console.log("update one");
         });
     }
     else if(msg_0 == 4) {
         //广告过滤掉
         logger.info("过滤掉一个广告, " + msg);
-        console.log("filter one");
     }
     else{
         //其他
-        console.log("cannot one");
         logger.info("无法解析类型, " + msg);
     }
 });

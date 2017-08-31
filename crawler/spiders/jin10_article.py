@@ -175,7 +175,7 @@ class Jin10ArticleSpider(scrapy.Spider):
         id = id_reg.findall(response.url)
         if id and len(id) > 0:
             id = id[0]
-            yaml_file = "../yaml/{id}.md".format(id=id)
+            yaml_file = "/usr/share/nginx/html/source/_posts/{id}.md".format(id=id)
             try:
                 with open(yaml_file, "a+") as fs:
                     fs.write("\n{body}".format(body=item['body']))

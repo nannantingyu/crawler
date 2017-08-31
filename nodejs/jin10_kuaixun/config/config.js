@@ -30,7 +30,7 @@ module.exports = {
     },
     "crawl": {
         "download_dir": path.join(root_path, "images"),
-        "yaml_dir": path.join(root_path, "yaml"),
+        "yaml_dir": "/usr/share/nginx/html/source/_data/",
         "yaml_root": "scsj.yml"
     },
     "redis": {
