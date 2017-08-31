@@ -99,7 +99,7 @@ socket.on('user message', function (msg) {
                     let last_msg = old_data[len-1], last_datetime = last_msg.datetime.substr(8,2), today = moment().format("DD");
                     //如果到了第二天，则删除前一天的内容
                     if(today != last_datetime) {
-                        fs.unlinkSync(yaml_dir);
+                        //fs.unlinkSync(yaml_dir);
                         old_data = [];
                     }
                 }
