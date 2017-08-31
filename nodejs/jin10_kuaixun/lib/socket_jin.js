@@ -88,7 +88,7 @@ socket.on('user message', function (msg) {
                 catch(err) {
                     mysqlconnection.query("select * from crawl_jin10_kuaixun where date(publish_time)='"+moment().format("YYYY-MM-DD")+"' order by publish_time asc", function(err, rows, fields) {
                         old_data = JSON.parse(JSON.stringify(rows));
-                        fs.unlinkSync(yaml_dir);
+                        //fs.unlinkSync(yaml_dir);
                         logger.info('删除老文件成功！');
                         console.log('删除老文件成功！', err);
                     });
