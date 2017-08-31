@@ -1,23 +1,26 @@
-const io = require('socket.io-client');
-const argv = process.argv.slice(2);
-const mysql = require('mysql');
-const moment = require("moment");
-const fs = require('fs');
-const config = JSON.parse(fs.readFileSync(argv[0], 'utf-8'));
-const log4js = require('log4js');
-log4js.configure(config.log4js);
-const logger = log4js.getLogger('log_file');
-const path = require('path');
-const request = require("request");
-const mysqlconnection = mysql.createConnection(config.mysql);
-mysqlconnection.connect();
-const redis = require('redis');
-const redis_client = redis.createClient(config.redis.port, config.redis.server);
+const io = require('socket.io-client'),
+    argv = process.argv.slice(2),
+    mysql = require('mysql'),
+    moment = require("moment"),
+    fs = require('fs'),
+    path = require('path'),
+    root_path = path.dirname(__dirname),
+    log4js = require('log4js'),
+    request = require("request"),
+    redis = require('redis');
 
-const serverArr = ['https://sshcdhpjfh.jin10.com:8080','https://sshibioeed.jin10.com:8082','https://sshibiealf.jin10.com:8081','https://sshibidkfk.jin10.com:8080','https://sshcdhpjle.jin10.com:8083','https://sshcdhpjne.jin10.com:8081','https://sshcdhgemp.jin10.com:8081','https://sshcdhpjnm.jin10.com:8081','https://sshibidkfk.jin10.com:8082','https://sshaekhdha.jin10.com:8083','https://sshcdhpjnm.jin10.com:8080','https://sshcdhpjig.jin10.com:8082','https://sshcdhpjod.jin10.com:8082','https://sshcdhgjaf.jin10.com:8083','https://sshibjpiog.jin10.com:8082','https://sshibjpiog.jin10.com:8081','https://sshahmgghj.jin10.com:8080','https://sshcdhpjig.jin10.com:8083','https://sshcdhpjig.jin10.com:8080','https://sshcdhpjeg.jin10.com:8081','https://sshcdhpjdf.jin10.com:8083','https://sshcdhpjeg.jin10.com:8080','https://sshcdhpjii.jin10.com:8080','https://sshcdhpjkl.jin10.com:8083','https://sshcdhpjfo.jin10.com:8082','https://sshcdhpjdf.jin10.com:8082','https://sshcdhpjfo.jin10.com:8080','https://sshcdhpjnb.jin10.com:8083','https://sshcdhpjfh.jin10.com:8082','https://sshcdhpjoj.jin10.com:8083','https://sshibiealf.jin10.com:8080','https://sshcdhpjne.jin10.com:8083','https://sshcdhpipi.jin10.com:8080','https://sshiemhiae.jin10.com:8080','https://sshcdhpjib.jin10.com:8080','https://sshibjgkdk.jin10.com:8080','https://sshaekhdha.jin10.com:8080','https://sshcdhpjnb.jin10.com:8081','https://sshahmgghj.jin10.com:8081','https://sshcdhpjnb.jin10.com:8080'];
+const config = require(path.join(root_path, "config/config")),
+    serverArr = config.server_addr,
+    mysqlconnection = mysql.createConnection(config.mysql),
+    redis_client = redis.createClient(config.redis.port, config.redis.server);
+
+
+log4js.configure(config.log4js);
+const logger = log4js.getLogger(), msg_logger = log4js.getLogger("message");
+mysqlconnection.connect();
 const i = Math.floor(Math.random() * serverArr.length + 1) - 1, n = serverArr[i];
-let socket = io(n);
-let timeout = 3e4;
+let socket = io(n), timeout = 3e4;
+
 socket.on('connect', function (){
     console.log('socket connect');
     socket.emit('reg', 'ok');
@@ -61,11 +64,12 @@ let download = function(url, dir, filename){
     }
 
     request.head(url, function(err, res, body){
-        request(url).pipe(fs.createWriteStream(dir + "/" + filename));
+        request(url).pipe(fs.createWriteStream(path.join(dir, filename)));
     });
 };
 
 socket.on('user message', function (msg) {
+    msg_logger.info(msg);
     msg_0 = msg.charAt(0);
     let now = moment().format("YYYY-MM-DD HH:mm:ss");
 
@@ -132,10 +136,10 @@ socket.on('user message', function (msg) {
                         let url = data['image'].includes('http')?data['image']: "http://image.jin10.com/" + data['image'].replace(/^[\/]+/, "");
                         url = url.replace('_lite', '');
                         let filename = path.basename(url),
-                            dirname = config.crawl.download_dir + moment().format("YYYYMMDD") + "/";
+                            dirname = path.join(config.crawl.download_dir, moment().format("YYYYMMDD"));
                         download(url, dirname, filename);
-                        data['image'] = dirname + filename;
-                        yaml_data['more'] = true;
+                        data['image'] = path.join(dirname, filename);
+                        yaml_data['image'] = data['image'];
                     }
                 }
                 else{
@@ -178,7 +182,6 @@ socket.on('user message', function (msg) {
                         if(data['more_link'].includes('news.jin10'))
                         {
                             redis_client.zadd("detail_pages", 0, data['more_link']);
-                            yaml_data['img'] = data['image'];
                         }
                     }
 
