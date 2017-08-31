@@ -13,7 +13,17 @@ fs.readFile(yaml_dir, function(err, file_data) {
         let old_data = [];
         try {
             old_data = file_data.toString() ? Array.from(JSON.parse(file_data.toString())) : [];
-            old_data = old_data.sort((x, y) => (x < y));
+            for(let dt of old_data) {
+                console.log(dt.datetime);
+            }
+            old_data = old_data.sort(function(a, b) {
+                return (a['datetime'] < b['datetime'])?1 : -1;
+            });
+
+            console.log("\n\n___________________\n\n");
+            for(let dt of old_data) {
+                console.log(dt.datetime);
+            }
 
             let json_string =  JSON.stringify(old_data);
             console.log("开始写入文件，" + yaml_dir);
