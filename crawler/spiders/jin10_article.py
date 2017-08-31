@@ -131,7 +131,7 @@ class Jin10ArticleSpider(scrapy.Spider):
                         img = item['image'],
                         cat = item['type']
                     )
-                    with open("../yaml/{id}.md".format(id=dt['id']), 'w') as fs:
+                    with open("/usr/share/nginx/html/source/_posts/{id}.md".format(id=dt['id']), 'w') as fs:
                         fs.write(yaml_string)
 
                 yield item
