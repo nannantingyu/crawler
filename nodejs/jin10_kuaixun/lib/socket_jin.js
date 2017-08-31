@@ -76,6 +76,7 @@ socket.on('user message', function (msg) {
     if (msg_0 == 1 || msg_0 == 0) {
         let yaml_dir = path.join(config.crawl.yaml_dir, config.crawl.yaml_root);
         fs.readFile(yaml_dir, function(err, file_data){
+            console.log("get file, ", file_data);
             if(err) {
                 console.log("Read old json file err, ", err);
             }
@@ -86,11 +87,10 @@ socket.on('user message', function (msg) {
                 }
                 catch(err) {
                     mysqlconnection.query("select * from crawl_jin10_kuaixun where date(publish_time)='"+moment().format("YYYY-MM-DD")+"' order by publish_time asc", function(err, rows, fields) {
-                        if (err) throw err;
-
                         old_data = JSON.parse(JSON.stringify(rows));
                         fs.unlinkSync(yaml_dir);
-                        logger.info('re qurey 成功');
+                        logger.info('删除老文件成功！');
+                        console.log('删除老文件成功！', err);
                     });
                 }
 
