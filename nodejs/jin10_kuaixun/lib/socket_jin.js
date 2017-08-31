@@ -135,10 +135,11 @@ socket.on('user message', function (msg) {
                     if(keys_format.includes('image') && data['image']) {
                         let url = data['image'].includes('http')?data['image']: "http://image.jin10.com/" + data['image'].replace(/^[\/]+/, "");
                         url = url.replace('_lite', '');
+                        let day_now = moment().format("YYYYMMDD");
                         let filename = path.basename(url),
-                            dirname = path.join(config.crawl.download_dir, moment().format("YYYYMMDD"));
+                            dirname = path.join(config.crawl.download_dir, day_now);
                         download(url, dirname, filename);
-                        data['image'] = path.join(dirname, filename);
+                        data['image'] = path.join(day_now, filename);
                         yaml_data['image'] = data['image'];
                     }
                 }
