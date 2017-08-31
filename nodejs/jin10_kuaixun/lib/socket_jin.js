@@ -178,8 +178,8 @@ socket.on('user message', function (msg) {
                     detail_temp = `---\ntitle: ${data['publish_time']}资讯\ndate: ${data['publish_time']}\nlayout: post-scsj\n---\n${detail_body}`;
                 }
 
-                old_data.push(yaml_data);
-                let json_string =  JSON.stringify(old_data.reverse());
+                old_data.unshift(yaml_data);
+                let json_string =  JSON.stringify(old_data);
                 logger.info("开始写入文件，" + yaml_dir);
                 fs.writeFile(yaml_dir, json_string, function(err, data){
                     if(err) {
