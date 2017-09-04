@@ -30,11 +30,12 @@ socket.on('connect', function (){
 
 let reGetServer = function() {
     logger.info('reGetServer');
-    setTimeout(function(){
-        socket.disconnect();
-        let rand = Math.floor(Math.random() * serverArr.length + 1) - 1, server_addr = serverArr[rand];
-        socket = io(server_addr)
-    }, timeout)
+//    setTimeout(function(){
+//        socket.disconnect();
+//        let rand = Math.floor(Math.random() * serverArr.length + 1) - 1, server_addr = serverArr[rand];
+//        socket = io(server_addr)
+//    }, timeout)
+    throw new Error("重新连接");
 }
 
 socket.on('error', function (reason) {
