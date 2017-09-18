@@ -23,7 +23,8 @@ from crawler.models.crawl_economic_calendar import CrawlEconomicCalendar
 from crawler.models.crawl_economic_event import CrawlEconomicEvent
 from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
 from crawler.models.crawl_zhanzhang import CrawlZhanzhang
-from crawler.models.crawl_jin10_article import CrawlArticle
+from crawler.models.crawl_jin10_article import CrawlJin10Article
+from crawler.models.crawl_article import CrawlArticle
 import crawler.items as items
 import datetime
 
@@ -84,6 +85,8 @@ class JianKongPipeline(object):
         elif spider.name in ['zhanzhang']:
             self.parse_zhanzhang(item)
         elif spider.name in ['jin10_article', 'crawl_jin10_article_detail ']:
+            self.parse_jin10_article(item)
+        elif spider.name in ['weibo', 'weibo_article_detail']:
             self.parse_article(item)
 
     def parse_article(self, item):
@@ -103,8 +106,27 @@ class JianKongPipeline(object):
                     data['author'] = article.author
 
                 if data:
-                    session.query(CrawlArticle).filter(
-                        CrawlArticle.id == query[0]).update(data)
+                    session.query(CrawlArticle).filter(CrawlArticle.id == query[0]).update(data)
+
+    def parse_jin10_article(self, item):
+        article = CrawlJin10Article(**item)
+        with session_scope(self.sess) as session:
+            query = session.query(CrawlJin10Article.id).filter(and_(
+                CrawlJin10Article.source_id == article.source_id,
+            )).one_or_none()
+
+            if query is None:
+                session.add(article)
+            else:
+                data = {}
+                if article.body is not None:
+                    data['body'] = article.body
+                if article.author is not None:
+                    data['author'] = article.author
+
+                if data:
+                    session.query(CrawlJin10Article).filter(
+                        CrawlJin10Article.id == query[0]).update(data)
 
 
     def parse_zhanzhang(self, item):

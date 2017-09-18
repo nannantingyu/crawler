@@ -123,16 +123,14 @@ class Jin10ArticleSpider(scrapy.Spider):
                 item_in_redis = self.r.zscore('detail_pages', item['source_url'])
                 if item_in_redis is None:
                     self.r.zadd('detail_pages', item['source_url'], 0)
-                    yaml_string = "---\ntitle: {title}\ndate: {date}\ntags: {tags}\ndescription: {description}\nimg: {img}\ncategories: {cat}\n---".format(
-                        title = item['title'],
-                        date = dt['time_show'],
-                        tags = item['keywords'],
-                        description = item['description'],
-                        img = item['image'],
-                        cat = item['type']
-                    )
-                    with open("/usr/share/nginx/html/source/_posts/{id}.md".format(id=dt['id']), 'w') as fs:
-                        fs.write(yaml_string)
+                    # yaml_string = "---\ntitle: {title}\ndate: {date}\ntags: {tags}\ndescription: {description}\nimg: {img}\ncategories: {cat}\n---".format(
+                    #     title = item['title'],
+                    #     date = dt['time_show'],
+                    #     tags = item['keywords'],
+                    #     description = item['description'],
+                    #     img = item['image'],
+                    #     cat = item['type']
+                    # )
 
                 yield item
 
@@ -170,17 +168,6 @@ class Jin10ArticleSpider(scrapy.Spider):
         parser = ArticleParser(response)
         item = parser.parse()
         yield item
-
-        id_reg = re.compile(r"details\/(\d+)\.json")
-        id = id_reg.findall(response.url)
-        if id and len(id) > 0:
-            id = id[0]
-            yaml_file = "/usr/share/nginx/html/source/_posts/{id}.md".format(id=id)
-            try:
-                with open(yaml_file, "a+") as fs:
-                    fs.write("\n{body}".format(body=item['body']))
-            except Exception as e:
-                print e
 
         rand = random.randint(3, 7)
         time.sleep(rand)

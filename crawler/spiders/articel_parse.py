@@ -65,11 +65,13 @@ class ArticleParser(object):
         for _, match in enumerate(pat_img.finditer(htmlcontent)):
             img_name = match.group(1)
             full_img_url = None
-            if img_name.startswith('.'):
-                img_name = img_name[2:]
+
             if img_name.startswith('https://cdn.jin10.com/video/pic') or img_name.startswith('http://cdn.jin10x.com/news/pic'):
-                full_img_url = urljoin(self.base_url, img_name)
-                img_name = img_name.split('/')[-1]
+                full_img_url = img_name
+            elif img_name.startswith('//cdn.jin10.com/'):
+                full_img_url = "http:" + img_name
+
+            img_name = os.path.basename(img_name)
 
 
             if full_img_url is None:

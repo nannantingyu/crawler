@@ -15,6 +15,7 @@ import re
 from scrapy.http.cookies import CookieJar
 import pickle
 import os
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -89,8 +90,8 @@ class CookiesSaveingMiddleware(CookiesMiddleware):
 
         file_cookie = {}
         if os.path.exists(cookie_formater.format(key=cookiejarkey)):
-            with open(cookie_formater.format(key=cookiejarkey), 'rb') as fs:
-                file_cookie = pickle.load(fs)
+            with open(cookie_formater.format(key=cookiejarkey), 'r') as fs:
+                file_cookie = json.load(fs)
 
         if len(file_cookie) > 0:
             file_cookie.update(cookies)
@@ -99,6 +100,6 @@ class CookiesSaveingMiddleware(CookiesMiddleware):
 
 
         with open(cookie_formater.format(key=cookiejarkey), 'wb') as fs:
-            pickle.dump(file_cookie, fs)
+            json.dump(file_cookie, fs)
 
         request.cookies = file_cookie

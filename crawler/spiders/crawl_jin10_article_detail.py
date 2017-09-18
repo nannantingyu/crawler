@@ -37,12 +37,6 @@ class CrawlJin10ArticleDetailSpider(scrapy.Spider):
         id_reg = re.compile(r"details\/(\d+)\.json")
         id = id_reg.findall(response.url)
         id = id[0]
-        yaml_file = "../yaml/{id}.md".format(id=id)
-        try:
-            with open(yaml_file, "a+") as fs:
-                fs.write("\n{body}".format(body=item['body']))
-        except Exception as e:
-            print e
 
         rand = random.randint(3, 7)
         print response.url, "sleep ", rand

@@ -5,8 +5,8 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, func, Index, SmallInteger, DECIMAL, Date
 from crawler.models.util import Base
 
-class CrawlJin10Article(Base):
-    __tablename__ = 'crawl_jin10_article'
+class CrawlArticle(Base):
+    __tablename__ = 'crawl_article'
 
     id = Column(Integer, primary_key=True)
     title = Column(String(128))

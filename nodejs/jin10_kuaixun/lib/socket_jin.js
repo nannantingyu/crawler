@@ -70,7 +70,12 @@ let download = function(url, dir, filename){
     });
 };
 
+var times = 1;
 socket.on('user message', function (msg) {
+    times += 1;
+    if(times > 2){
+        throw new Error("重新连接");
+    }
     msg_logger.info(msg);
     msg_0 = msg.charAt(0);
     let now = moment().format("YYYY-MM-DD HH:mm:ss");

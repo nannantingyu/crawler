@@ -12,3 +12,8 @@ tmp/
 crawler/cookies/
 crawler/spiders/test.py
 crawler/spiders/pme.py
+nodejs/jin10_kuaixun/detail/
+nodejs/jin10_kuaixun/images/
+yaml/
+nodejs/jin10_kuaixun/logs/
+nodejs/jin10_kuaixun/config/
