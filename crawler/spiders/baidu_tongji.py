@@ -170,8 +170,10 @@ class BaiduTongjiSpider(scrapy.Spider):
             json_data = json.loads(response.body)
             data = json_data['data']
             all_data = {}
+
+            kindex = 0
             for index,item in enumerate(data['items'][0]):
-                for jindex, subitem in enumerate(item):
+                for subitem in item:
                     item = BaiduTongjiItem()
                     detail = subitem['detail']
                     sub_detail = data['items'][1][index]
@@ -210,8 +212,10 @@ class BaiduTongjiSpider(scrapy.Spider):
                         item['entry_page'] = sub_detail[4]
 
                     item['site'] = site_name
-                    all_data[jindex] = item
+                    all_data[kindex] = item
+                    kindex += 1
 
+            # print all_data
             yield all_data
             new_time = data['items'][1][0][0]
             self.sites_map[site_id]['page_now'] += 1
