@@ -1,0 +1,1 @@
+npm rum jin10 > output/jin10.out

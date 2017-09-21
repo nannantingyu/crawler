@@ -123,14 +123,6 @@ class Jin10ArticleSpider(scrapy.Spider):
                 item_in_redis = self.r.zscore('detail_pages', item['source_url'])
                 if item_in_redis is None:
                     self.r.zadd('detail_pages', item['source_url'], 0)
-                    # yaml_string = "---\ntitle: {title}\ndate: {date}\ntags: {tags}\ndescription: {description}\nimg: {img}\ncategories: {cat}\n---".format(
-                    #     title = item['title'],
-                    #     date = dt['time_show'],
-                    #     tags = item['keywords'],
-                    #     description = item['description'],
-                    #     img = item['image'],
-                    #     cat = item['type']
-                    # )
 
                 yield item
 
@@ -157,7 +149,7 @@ class Jin10ArticleSpider(scrapy.Spider):
 
             yield scrapy.Request(
                 main_url.format(cat=self.categories[self.cat_index]['id']),
-                meta={'cookiejar': self.name}, callback=self.parse_list)
+                meta={'cookiejar': self.name}, calback=self.parse_list)
         else:
             details_first = self.r.zrange('detail_pages', 0, 0, withscores=True)
             if len(details_first) > 0 and int(details_first[0][1]) == 0:

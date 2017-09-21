@@ -1,0 +1,1121 @@
+
+> node-tutu@1.0.0 jin10 D:\project\crawl-operation\nodejs
+> node daemon.js app/jin10
+
+start server
+[fetch data] socket connect
+
+[fetch data] ---
+title: 2017-09-21 11:36:33资讯
+date: 2017-09-21 11:36:33
+layout: post-scsj
+---
+商务部发言人高峰：<br />商务部监测的5000家重点企业零售额8月份同比增长5.2%，增速比7月加快0.1个百分点，创2015年以来的最高水平。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:37:15资讯
+date: 2017-09-21 11:37:15
+layout: post-scsj
+---
+中国地震台网正式测定：09月21日11时28分在新疆博尔塔拉州精河县发生3.2级地震，震源深度15千米。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:40:00资讯
+date: 2017-09-21 11:40:00
+layout: post-scsj
+---
+<a href="https://tv.jin10.com/" target="_blank"><img src="https://image.jin10.com/1505910564.jpg" width="754" height="120" /></a>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:40:01资讯
+date: 2017-09-21 11:40:01
+layout: post-scsj
+---
+<b>【金十早报】不可错过的每日精彩，Dora带您回顾全球金融最新资讯。欢迎点击收看>></b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:45:43资讯
+date: 2017-09-21 11:45:43
+layout: post-scsj
+---
+<b>商务部发言人高峰：至于所谓的强制性技术转让的问题，中国没有任何一部法律强制外国投资者转让技术。在具体的企业合作过程中可能会出现类似的情况，那也是企业之间的市场行为，完全没有政府的干预。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:46:03资讯
+date: 2017-09-21 11:46:03
+layout: post-scsj
+---
+商务部发言人高峰：外国企业在中国设立合资企业是市场行为和企业的自主选择。中国拥有得天独厚稳定的投资环境、完整的产业配套能力、技术娴熟又吃苦耐劳的产业工人，以及巨大的市场规模和贸易集成的优势。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:47:21资讯
+date: 2017-09-21 11:47:21
+layout: post-scsj
+---
+商务部发言人高峰：多边贸易体制得到有效地维护，多边规则得以认真地遵守，是全球经济繁荣发展的根本保证。恰恰是个别国家采取的单边主义做法、发出的单边主义声音，是对多边贸易体制“前所未有”的挑战。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:58:14资讯
+date: 2017-09-21 11:58:14
+layout: post-scsj
+---
+商务部发言人高峰：将继续密切关注无人零售的发展，广泛了解零售企业技术应用的情况，深入分析技术创新的方向，适时发布《零售业技术创新框架》和技术应用典型案例，不断增强创新转型的能力，更好地适应消费升级的需求。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 11:59:12资讯
+date: 2017-09-21 11:59:12
+layout: post-scsj
+---
+商务部发言人高峰：服务贸易逆差是我国经济转型升级过程中一个阶段性的现象。技术、知识产权等特定行业的进口对国民经济的发展、产业结构的调整起到了积极的促进作用。[回应服务贸易逆差创新高]
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:01:44资讯
+date: 2017-09-21 12:01:44
+layout: post-scsj
+---
+据外媒：美国总统特朗普将对受飓风Maria影响的美属维京群岛之一圣克劳岛（St Croix）提供资金支持。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[error] D:\project\crawl-operation\nodejs\app\jin10\index.js:145
+                            id = querystring.parse(url.parse(data['more_link']).query)['id'];
+                            ^
+
+ReferenceError: querystring is not defined
+    at D:\project\crawl-operation\nodejs\app\jin10\index.js:145:29
+    at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:504:3)
+
+1 null
+start server
+[fetch data] socket connect
+
+[fetch data] ---
+title: 2017-09-21 12:03:46资讯
+date: 2017-09-21 12:03:46
+layout: post-scsj
+---
+商务部发言人高峰：下一步，我们将按照国务院39号文《国务院关于促进外资增长若干措施的通知》的要求，协调推动有关部门，尽快研究出台减少新能源汽车制造领域外商投资限制的政策措施，持续推进这个领域的对外开放。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:07:14资讯
+date: 2017-09-21 12:07:14
+layout: post-scsj
+---
+中国互联网金融协会：编制《互联网金融个体网络借贷借贷合同要素》团体标准，近日向相关从业机构和部门征求意见，下一步将根据反馈意见修订《标准》，经审议通过后对外发布。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:17:43资讯
+date: 2017-09-21 12:17:43
+layout: post-scsj
+---
+<b>9月20日芝加哥商业交易所（CME）外汇类商品成交量报告已在金十数据中心更新！欢迎点击查看</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:17:45资讯
+date: 2017-09-21 12:17:45
+layout: post-scsj
+---
+<b>9月20日芝加哥商业交易所（CME）金属类商品成交量报告已在金十数据中心更新！欢迎点击查看</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:18:01资讯
+date: 2017-09-21 12:18:01
+layout: post-scsj
+---
+<b>9月20日芝加哥商业交易所（CME）能源类商品成交量报告已在金十数据中心更新！欢迎点击查看</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:23:11资讯
+date: 2017-09-21 12:23:11
+layout: post-scsj
+---
+商务部发言人高峰：中国-新加坡自贸区升级谈判目前已经举行三轮。重点就货物、服务、投资、电子商务、竞争、环境与贸易、经济合作等领域展开了具体的磋商，取得了积极进展。第四轮谈判将于10月的11号-12号在新加坡举行。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:24:26资讯
+date: 2017-09-21 12:24:26
+layout: post-scsj
+---
+中国地震台网：墨西哥当地时间9月20日早间，墨西哥总统培尼亚宣布为地震中的遇难者进行三天的国家哀悼。目前，墨西哥城仍处在停工停学状态，房屋倒塌点都组织了政府相关机构和民众进行挖掘救援。 
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:27:16资讯
+date: 2017-09-21 12:27:16
+layout: post-scsj
+---
+据外媒：土耳其、伊朗和伊拉克将敦促库尔德地区政府停止独立公投，将考虑采取应对措施。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:32:04资讯
+date: 2017-09-21 12:32:04
+layout: post-scsj
+---
+商务部发言人高峰：正在拟定中的《外国投资法》等目的在于保障外国投资者的合法权益。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:32:19资讯
+date: 2017-09-21 12:32:19
+layout: post-scsj
+---
+【希拉里：仍可能寻求法院裁定总统大选结果无效】美国前民主党总统候选人希拉里表示，如果“通俄门”调查发现俄罗斯确实干涉去年大选，不排除寻求法院裁定结果无效的可能；同时，她承认采取法律行动有难度，“我不知道是否有任何法律途径可以做到这点，一些学者认为有可能实现，但我并不认为他们有很强的依据，我认为我们没有这样的机制”。（新华社）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:42:55资讯
+date: 2017-09-21 12:42:55
+layout: post-scsj
+---
+新华社评论：新兴市场韧性增强有助化解美联储政策外溢效应。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:43:33资讯
+date: 2017-09-21 12:43:33
+layout: post-scsj
+---
+<b>新华社评论：对全球主要新兴经济体来说，无须过度担忧美联储货币政策调整，而应注重修炼“内功”，提升危机应对能力，创新资本流动管理方法，以尽力化解美联储政策调整的外溢效应。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:46:04资讯
+date: 2017-09-21 12:46:04
+layout: post-scsj
+---
+据美联社：推特将在下周与参议院情报委员会会面。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:50:17资讯
+date: 2017-09-21 12:50:17
+layout: post-scsj
+---
+【知情人士：央行要求各地严禁消费贷款违规流入房地产】知情人士称，中国央行会同银监会近期要求各地监管部门，指导银行规范个人消费贷款，防止消费贷款违规流入房地产市场。中国央行的要求重点针对一线和热点房地产城市。中国央行近期发现，今年以来，至少有数千亿元人民币资金违规通过个人消费贷款，流入房地产市场。但是，知情人士不清楚央行和银监会通知的具体日期。（新浪）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:53:28资讯
+date: 2017-09-21 12:53:28
+layout: post-scsj
+---
+<b>美国地质勘探局：瓦努阿图（西南太平洋岛国）发生6.4级地震。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 12:54:18资讯
+date: 2017-09-21 12:54:18
+layout: post-scsj
+---
+【商务部：密切关注欧方相关立法动向】9月21日，商务部新闻发言人高峰回应“欧盟将加强对外国投资对欧盟成员国国家安全及公共秩序方面的审查”。他指出，将密切关注欧方立法动向，评估可能产生的影响。继续鼓励和支持有能力、有条件的中企赴欧投资，加快《中欧投资协定》谈判进程，为双方企业创造稳定、透明、可预期的法律环境，扩大双向投资。欧盟是中国企业近年来对外投资的重点地区之一。据统计，截至今年7月，中国累计对欧盟投资达757亿美元。（财新）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:00:49资讯
+date: 2017-09-21 13:00:49
+layout: post-scsj
+---
+<b>日本经济产业省：日本8月粗钢产量环比上涨1.7%至873万吨，同比下降2%。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:04:51资讯
+date: 2017-09-21 13:04:51
+layout: post-scsj
+---
+据外媒援引交易员：澳元在0.7980水平或面临一系列的买盘和止损盘。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[error] D:\project\crawl-operation\nodejs\app\jin10\index.js:145
+                            id = querystring.parse(url.parse(data['more_link']).query)['id'];
+                            ^
+
+ReferenceError: querystring is not defined
+    at D:\project\crawl-operation\nodejs\app\jin10\index.js:145:29
+    at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:504:3)
+
+1 null
+start server
+[fetch data] socket connect
+
+[fetch data] ---
+title: 2017-09-21 13:08:20资讯
+date: 2017-09-21 13:08:20
+layout: post-scsj
+---
+【俄一周两度试射RS-24洲际导弹】在欧洲及东北亚局势紧张的情况下，俄罗斯近日频频展示军力。继在波罗的海及远东地区举行大型军事演习后，俄军相隔大约一周后，周三(20日)再度试射一枚RS-24型亚尔斯洲际弹道导弹。RS-24型的射程达1.2万公里，误差只有150米，预料到了今年底，俄军大约72%的洲际弹道导弹都是RS-24型。（环球网）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:09:24资讯
+date: 2017-09-21 13:09:24
+layout: post-scsj
+---
+澳洲联储主席洛威：澳大利亚经济确实在改善。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:10:00资讯
+date: 2017-09-21 13:10:00
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：其他国家加息对澳大利亚没有“自动的影响”。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:10:21资讯
+date: 2017-09-21 13:10:21
+layout: post-scsj
+---
+澳洲联储主席洛威：货币政策对经济增速影响很小。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:10:35资讯
+date: 2017-09-21 13:10:35
+layout: post-scsj
+---
+澳洲联储主席洛威：全球货币政策扩张正接近尾声。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:11:05资讯
+date: 2017-09-21 13:11:05
+layout: post-scsj
+---
+澳洲联储主席洛威：高企的家庭债务意味着消费将对更高的利率“相当敏感”。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:11:39资讯
+date: 2017-09-21 13:11:39
+layout: post-scsj
+---
+澳洲联储主席洛威：经济在就业和CPI目标上将取得更大进步。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:11:42资讯
+date: 2017-09-21 13:11:42
+layout: post-scsj
+---
+澳洲联储主席洛威：美国在引领全球开放市场上后退将使前景复杂化。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:11:50资讯
+date: 2017-09-21 13:11:50
+layout: post-scsj
+---
+澳洲联储主席洛威：需要生产力更强劲以提高人均实际收入。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:12:48资讯
+date: 2017-09-21 13:12:48
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：缓慢的薪资增速对家庭预算造成压力，使通货膨胀保持在低位。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:13:07资讯
+date: 2017-09-21 13:13:07
+layout: post-scsj
+---
+澳洲联储主席洛威：需要更强的生产力来提高人均收入。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:13:10资讯
+date: 2017-09-21 13:13:10
+layout: post-scsj
+---
+澳洲联储主席洛威：当前正处于降低失业率，提振通胀的路径中。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:13:44资讯
+date: 2017-09-21 13:13:44
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：希望看到更强劲的商业投资、持续的就业增长以及更快的工薪资增速。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:14:33资讯
+date: 2017-09-21 13:14:33
+layout: post-scsj
+---
+澳洲联储主席洛威：灵活的澳元汇率使得央行在调整利率的时间上更有独立性。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:14:59资讯
+date: 2017-09-21 13:14:59
+layout: post-scsj
+---
+澳洲联储主席洛威：澳大利亚经济的确有一些风险。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:15:11资讯
+date: 2017-09-21 13:15:11
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：货币政策在支撑经济转型方面发挥着重要角色。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:15:36资讯
+date: 2017-09-21 13:15:36
+layout: post-scsj
+---
+澳洲联储主席洛威：将密切关注债务水平对消费的影响。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:15:57资讯
+date: 2017-09-21 13:15:57
+layout: post-scsj
+---
+澳洲联储主席洛威：收紧住房贷款规则对家庭债务风险产生积极影响。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:16:20资讯
+date: 2017-09-21 13:16:20
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：不寻求过度调整货币政策。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:20:09资讯
+date: 2017-09-21 13:20:09
+layout: post-scsj
+---
+<b>德意志银行：日本可能在10月22日举行大选。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:20:29资讯
+date: 2017-09-21 13:20:29
+layout: post-scsj
+---
+【四大油企成品油出口受阻 或掀新一轮促销大战】据相关人士透露，本年度第四批加工贸易出口配额或不再下发，若消息属实，今年的出口配额总量比去年加工贸易总额度减少850.9万吨。成品油出口量的缩减将导致国内资源供大于求的矛盾加剧；四大油企必然要加大内销力度，而地方炼厂与三桶油抗衡的实力越来越强，或将掀起新一轮促销大战。（新华社）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:21:09资讯
+date: 2017-09-21 13:21:09
+layout: post-scsj
+---
+据俄罗斯卫星网：俄罗斯国防部消息称代尔祖尔已有85%以上地区位于叙军控制之下，未来一周将得到彻底解放。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:31:00资讯
+date: 2017-09-21 13:31:00
+layout: post-scsj
+---
+【交易所开盘】<br />上海黄金交易所黄金T+D 9月21日（周四）午盘盘初下跌0.62%报276.78元/克；</br >上海黄金交易所白银T+D 9月21日（周四）午盘盘初下跌0.96%报3826.00元/千克。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:33:54资讯
+date: 2017-09-21 13:33:54
+layout: post-scsj
+---
+【股市收盘】台湾加权指数9月21日（周四）收盘上涨60.9点，涨幅0.58%，报10580.07点。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:35:07资讯
+date: 2017-09-21 13:35:07
+layout: post-scsj
+---
+据外媒：百度称将投资15亿美元至自动驾驶项目。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:35:51资讯
+date: 2017-09-21 13:35:51
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：中期薪资增速应该能够达到3.5%的平均水平。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:36:28资讯
+date: 2017-09-21 13:36:28
+layout: post-scsj
+---
+澳洲联储主席洛威：税收、劳动力和竞争力是促进生产力的关键因素。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:36:46资讯
+date: 2017-09-21 13:36:46
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：薪资增速和货币政策没有直接联系。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:38:25资讯
+date: 2017-09-21 13:38:25
+layout: post-scsj
+---
+澳洲联储主席洛威：利率决定将以通胀目标为基础。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:39:00资讯
+date: 2017-09-21 13:39:00
+layout: post-scsj
+---
+澳洲联储主席洛威：实现通胀目标需要更快的薪资增速。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+1 null
+start server
+[fetch data] socket connect
+
+[fetch data] http://image.jin10.com/1505913595.png
+
+[fetch data] ---
+title: 2017-09-21 13:40:00资讯
+date: 2017-09-21 13:40:00
+layout: post-scsj
+---
+【今日重点关注的财经数据与事件】2017年9月21日 周四<br />① 14:00 瑞士8月贸易帐<br />② 20:30 加拿大7月批发销售月率、美国9月费城联储制造业指数、美国至9月16日当周初请失业金人数<br />③ 21:00 美国7月FHFA房价指数月率<br />④ 21:15 欧洲央行行长德拉基为第二届ESRB年度会议致欢迎词<br />⑤ 22:00 美国8月谘商会领先指标月率<br />⑥ 22:30 美国至9月15日当周EIA天然气库存
+D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:40:25资讯
+date: 2017-09-21 13:40:25
+layout: post-scsj
+---
+澳洲联储主席洛威：澳大利亚的贷款拖欠仍然很低。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:42:23资讯
+date: 2017-09-21 13:42:23
+layout: post-scsj
+---
+据路透：法国国民阵线副主席菲利波称将退出国民阵线，极右翼政党内部分裂。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:44:23资讯
+date: 2017-09-21 13:44:23
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：近期的就业数据很积极。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:45:29资讯
+date: 2017-09-21 13:45:29
+layout: post-scsj
+---
+澳洲联储主席洛威：很难说通胀将很快达到2.5%的水平。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:46:22资讯
+date: 2017-09-21 13:46:22
+layout: post-scsj
+---
+瑞士政府：预计2018年GDP增速为2%，此前预期1.9%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:46:25资讯
+date: 2017-09-21 13:46:25
+layout: post-scsj
+---
+瑞士政府：预计2017年GDP增速为0.9%，此前预期1.4%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:46:56资讯
+date: 2017-09-21 13:46:56
+layout: post-scsj
+---
+瑞士政府：预计2017年CPI增速为0.5%，此前预期0.5%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:47:15资讯
+date: 2017-09-21 13:47:15
+layout: post-scsj
+---
+瑞士政府：预计2018年CPI增速为0.2%，此前预期0.2%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:47:49资讯
+date: 2017-09-21 13:47:49
+layout: post-scsj
+---
+澳洲联储主席洛威：更有可能加息而不是降息。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:48:16资讯
+date: 2017-09-21 13:48:16
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：一段时间内利率不会上涨。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:48:19资讯
+date: 2017-09-21 13:48:19
+layout: post-scsj
+---
+澳洲联储主席洛威：有信心最终将回归2.5%的通胀水平。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:48:49资讯
+date: 2017-09-21 13:48:49
+layout: post-scsj
+---
+澳洲联储主席洛威：澳洲人民应做好加息的准备。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:50:00资讯
+date: 2017-09-21 13:50:00
+layout: post-scsj
+---
+【数据提示】瑞士8月贸易帐将在十分钟后公布。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:50:49资讯
+date: 2017-09-21 13:50:49
+layout: post-scsj
+---
+<b>澳洲联储主席洛威：必须有加密货币方面的政策。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:51:13资讯
+date: 2017-09-21 13:51:13
+layout: post-scsj
+---
+澳洲联储主席洛威：加密货币很像是一种投机游戏。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] http://image.jin10.com/1505973177.png
+
+[fetch data] ---
+title: 2017-09-21 13:53:15资讯
+date: 2017-09-21 13:53:15
+layout: post-scsj
+---
+<b>【金十图示】北京时间22:00将有欧元、日元、澳元一系列外汇期权大单到期，敬请管理风险。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 13:53:58资讯
+date: 2017-09-21 13:53:58
+layout: post-scsj
+---
+【行情】澳元兑美元AUD/USD日内跌逾0.8%，现报0.7963，刷新9月19日以来新低。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:02:10资讯
+date: 2017-09-21 14:02:10
+layout: post-scsj
+---
+据NEWSHUB-REID民调：新西兰国家党支持率为45.8%，工党为37.3%，第一党、绿党均为7.1%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:02:31资讯
+date: 2017-09-21 14:02:31
+layout: post-scsj
+---
+【股市收盘】日经225指数9月21日（周四）收盘上涨40.54点，涨幅0.20%，报20351.00点。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:03:46资讯
+date: 2017-09-21 14:03:46
+layout: post-scsj
+---
+【行情】德国10年期国债收益率创7周新高至0.47%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:06:18资讯
+date: 2017-09-21 14:06:18
+layout: post-scsj
+---
+<b>据瑞士海关：瑞士8月黄金出口环比下跌40%至71吨。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:08:19资讯
+date: 2017-09-21 14:08:19
+layout: post-scsj
+---
+【媒体：特朗普倾向于废除伊核协议】据NBC援引独家消息源，美国总统特朗普倾向于废除同伊朗签署的核问题协议，他正考虑另一行动方案。据悉，目前特朗普向美国的欧洲盟友提供了90天重启伊核谈判的机会。特朗普必须最迟于10月15日判断伊朗有没有遵守该项协议；如果他不作出判断，美国国会便有60天时间去决定是否恢复制裁伊朗。（俄罗斯卫星网）
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:15:15资讯
+date: 2017-09-21 14:15:15
+layout: post-scsj
+---
+【行情】黑色系全线飘绿，锰硅仍封跌停，焦煤跌近5%，硅铁跌超4%，郑煤跌逾3%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:15:58资讯
+date: 2017-09-21 14:15:58
+layout: post-scsj
+---
+<b>外交部长王毅：中方理解韩方维护国家安全的需要，但我们坚决反对在韩部署“萨德”系统，因为此举超出韩国自身防卫，直接损害中方的战略安全利益。（新华社）</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:16:45资讯
+date: 2017-09-21 14:16:45
+layout: post-scsj
+---
+外交部长王毅：中方将继续严格执行安理会涉朝决议。中方希决议能够得到全面和完整执行。随着制裁逐步推进，应适时将制裁压力转换为谈判动力。希韩方继续认真考虑中方“双暂停”倡议，为缓和当前半岛紧张作出努力。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:18:00资讯
+date: 2017-09-21 14:18:00
+layout: post-scsj
+---
+【提示】瑞士8月黄金出口下降至2014年8月以来新低。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:19:27资讯
+date: 2017-09-21 14:19:27
+layout: post-scsj
+---
+<a href="https://v.jin10.com/details.html?id=2504" target="_blank"><img src="https://image.jin10.com/1505821866.jpg" width="754" height="120" /></a>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:19:28资讯
+date: 2017-09-21 14:19:28
+layout: post-scsj
+---
+<b>【华尔街时刻】朝鲜问题将持续 长期仍看涨黄金支撑位看向1285</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:20:01资讯
+date: 2017-09-21 14:20:01
+layout: post-scsj
+---
+【股市收盘】澳大利亚ASX200指数9月21日（周四）收盘下跌53.69点，跌幅0.94%，报5655.40点。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:20:22资讯
+date: 2017-09-21 14:20:22
+layout: post-scsj
+---
+港交所总裁李小加：目前还没有宏观结构改革的时间表。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:21:01资讯
+date: 2017-09-21 14:21:01
+layout: post-scsj
+---
+乌克兰总统波罗申科：乌克兰希望深化与欧盟的合作。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:23:05资讯
+date: 2017-09-21 14:23:05
+layout: post-scsj
+---
+港交所总裁李小加：港交所将实现包括头寸限制在内的宏观结构现代化。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:27:57资讯
+date: 2017-09-21 14:27:57
+layout: post-scsj
+---
+据外媒：科威特石油公司据悉将在10月提供8万吨燃油。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:29:03资讯
+date: 2017-09-21 14:29:03
+layout: post-scsj
+---
+希腊经济部长：希腊2018年不需要新的财政紧缩。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:30:17资讯
+date: 2017-09-21 14:30:17
+layout: post-scsj
+---
+【提示】日本央行行长黑田东彦新闻发布会已经开始。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:32:31资讯
+date: 2017-09-21 14:32:31
+layout: post-scsj
+---
+【股市收盘】韩国KOSPI指数9月21日（周四）收盘下跌5.70点，跌幅0.24%，报2406.50点。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:32:51资讯
+date: 2017-09-21 14:32:51
+layout: post-scsj
+---
+日本央行行长黑田东彦：希望物价能升至2%。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] http://image.jin10.com/1505975591.jpg
+
+[fetch data] ---
+title: 2017-09-21 14:33:49资讯
+date: 2017-09-21 14:33:49
+layout: post-scsj
+---
+日本央行行长黑田东彦：为了达到通胀目标将在适当时候调整政策。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:35:00资讯
+date: 2017-09-21 14:35:00
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：由于收益率曲线控制和QQE，货币条件很宽松。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:35:03资讯
+date: 2017-09-21 14:35:03
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：日本10年期国债收益率一直稳定。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:35:13资讯
+date: 2017-09-21 14:35:13
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：物价仍然疲软。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:35:29资讯
+date: 2017-09-21 14:35:29
+layout: post-scsj
+---
+日本央行行长黑田东彦：将继续超宽松的货币政策。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:38:31资讯
+date: 2017-09-21 14:38:31
+layout: post-scsj
+---
+日本央行行长黑田东彦：债券市场流动性在增加。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:39:39资讯
+date: 2017-09-21 14:39:39
+layout: post-scsj
+---
+日本央行行长黑田东彦：对片冈刚士投下的反对票拒绝置评。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:40:22资讯
+date: 2017-09-21 14:40:22
+layout: post-scsj
+---
+日本央行行长黑田东彦：没有看到国债市场出现功能性问题。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:42:12资讯
+date: 2017-09-21 14:42:12
+layout: post-scsj
+---
+日本央行行长黑田东彦：如有必要会采取额外宽松措施。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:42:57资讯
+date: 2017-09-21 14:42:57
+layout: post-scsj
+---
+日本央行行长黑田东彦：在不同指标和市场参与者之间存在关于日本国债流动性的看法差距。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:43:31资讯
+date: 2017-09-21 14:43:31
+layout: post-scsj
+---
+日本央行行长黑田东彦：美联储目前采取了合适的政策措施，以后也将如此。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] http://image.jin10.com/1505976223.jpg
+
+[fetch data] ---
+title: 2017-09-21 14:44:30资讯
+date: 2017-09-21 14:44:30
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：美联储的措施对日本利率不会产生直接影响。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:44:35资讯
+date: 2017-09-21 14:44:35
+layout: post-scsj
+---
+【行情】美元兑日元USD/JPY短线拉升20点，续刷7月18日以来新高，现报112.63。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:45:58资讯
+date: 2017-09-21 14:45:58
+layout: post-scsj
+---
+日本央行行长黑田东彦：不会在ETF购买上作出改变。
+D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:46:47资讯
+date: 2017-09-21 14:46:47
+layout: post-scsj
+---
+日本央行行长黑田东彦：ETF购买对风险溢价和刺激经济带来影响。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:47:17资讯
+date: 2017-09-21 14:47:17
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：改变2%的物价目标不合时宜。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:47:41资讯
+date: 2017-09-21 14:47:41
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：不会随着美联储加息而加息。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:48:32资讯
+date: 2017-09-21 14:48:32
+layout: post-scsj
+---
+<b>【金十新产品——交易英雄】3800多个实盘账户任您观摩，交易记录实时更新，盈亏牛熊立见分晓，欢迎绑定与使用：</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:48:59资讯
+date: 2017-09-21 14:48:59
+layout: post-scsj
+---
+【澳反恐警察：澳或将“随时且无可避免地”遭受恐袭】据联合早报，澳大利亚反恐警察近日警告称，澳大利亚遭到重大恐怖袭击“无可避免”，且“随时可能发生”。近几年来，澳当局已挫败了13起恐袭阴谋，最新一起未遂阴谋发生在今年7月；而本土极端分子现已成为澳政府越来越大的隐忧，一个关键风险在于，这些极端分子尚未出现在当局的观察名单上。
+D:\project\crawl-operation\nodejs\detail
+
+[fetch data] http://image.jin10.com/1505976480.png
+
+[fetch data] ---
+title: 2017-09-21 14:49:12资讯
+date: 2017-09-21 14:49:12
+layout: post-scsj
+---
+日本央行行长黑田东彦：拒绝对美联储政策给股市和汇市带来的影响置评。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:50:34资讯
+date: 2017-09-21 14:50:34
+layout: post-scsj
+---
+<b>日本央行行长黑田东彦：委员会同意当前货币政策足以实现物价目标。</b>
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:51:17资讯
+date: 2017-09-21 14:51:17
+layout: post-scsj
+---
+日本央行行长黑田东彦：政府和议会应该对财政管理负责。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
+[fetch data] ---
+title: 2017-09-21 14:51:45资讯
+date: 2017-09-21 14:51:45
+layout: post-scsj
+---
+日本央行行长黑田东彦：财政规则很重要。
+
+[fetch data] D:\project\crawl-operation\nodejs\detail
+
