@@ -45,6 +45,7 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/wallstreetcn/
 child.on('stderr', function(data) {
     logger.error(`wallstreetcn 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
     child.stop();
+    child.restart();
 });
 
 child.on('stdout', function (content) {

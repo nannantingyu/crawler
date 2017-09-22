@@ -32,6 +32,7 @@ child.on('restart', function() {
 child.on('stderr', function(data) {
     logger.error(`fx678 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
     child.stop();
+    child.restart();
 });
 
 child.on('stdout', function (data) {
