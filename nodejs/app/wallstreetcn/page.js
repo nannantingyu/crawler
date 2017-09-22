@@ -12,3 +12,15 @@ page.onCallback = function(data) {
 page.onLoadFinished = function(status) {
 
 }
+
+page.onError = function(msg, trace) {
+    var msgStack = ['wallstreetcn ERROR: ' + msg];
+    if (trace && trace.length) {
+        msgStack.push('TRACE:');
+        trace.forEach(function(t) {
+            msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
+        });
+    }
+
+    console.error(msgStack.join('\n'));
+};
