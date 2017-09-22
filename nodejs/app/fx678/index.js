@@ -26,7 +26,12 @@ child.on('exit:code', function(code) {
 });
 
 child.on('restart', function() {
-    console.error(`fx678重启脚本${argvs[0]}第${child.times}次，【错误发生】，时间：${moment().format("YYYY-MM-DD HH:mm:ss")}`);
+    logger.error(`fx678重启脚本${argvs[0]}第${child.times}次，【错误发生】，时间：${moment().format("YYYY-MM-DD HH:mm:ss")}`);
+});
+
+child.on('stderr', function(data) {
+    logger.error(`fx678 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
+    child.stop();
 });
 
 child.on('stdout', function (data) {

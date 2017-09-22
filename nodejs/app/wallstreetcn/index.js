@@ -42,6 +42,11 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/wallstreetcn/
     silent : true
 });
 
+child.on('stderr', function(data) {
+    logger.error(`wallstreetcn 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
+    child.stop();
+});
+
 child.on('stdout', function (content) {
     logger.info('[ori]', content.toString());
     content = content.toString().replace(/\\n/g, "")
