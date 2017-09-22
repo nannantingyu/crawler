@@ -21,13 +21,21 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/fx678/page.js
     silent : true
 });
 
+child.on('exit:code', function(code) {
+    logger.error(`fx678脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
+});
+
+child.on('restart', function() {
+    console.error(`fx678重启脚本${argvs[0]}第${child.times}次，【错误发生】，时间：${moment().format("YYYY-MM-DD HH:mm:ss")}`);
+});
+
 child.on('stdout', function (data) {
     console.log("Data fetch", data.toString());
     try{
         data = JSON.parse(data);
     }
     catch(err) {
-        console.log(err);
+        logger.log(err);
         data = null;
     }
 
