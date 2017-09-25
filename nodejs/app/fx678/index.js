@@ -22,21 +22,24 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/fx678/page.js
 });
 
 child.on('exit:code', function(code) {
+    process.kill(child.child.pid);
     logger.error(`fx678脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
 });
 
 child.on('restart', function() {
+    process.kill(child.child.pid);
     logger.error(`fx678重启脚本${argvs[0]}第${child.times}次，【错误发生】，时间：${moment().format("YYYY-MM-DD HH:mm:ss")}`);
 });
 
 child.on('stderr', function(data) {
     logger.error(`fx678 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
+    process.kill(child.child.pid);
     child.stop();
     child.restart();
 });
 
 child.on('stdout', function (data) {
-    console.log("Data fetch", data.toString());
+    logger.info("Data fetch", data.toString());
     try{
         data = JSON.parse(data);
     }
@@ -105,7 +108,7 @@ child.on('stdout', function (data) {
                 sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}', where dateid=${data.newsId};`;
             }
 
-            console.log(insert_sql);
+            logger.info(insert_sql);
             mysqlconnection.query(insert_sql, function(err, rows, fields) {
                 if (err) logger.error('error sql: ' + insert_sql);
                 else{
@@ -134,7 +137,7 @@ child.on('stdout', function (data) {
             info['dateid'] = data.newsId;
 
             let insert_sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
-            console.log(insert_sql);
+            logger.info(insert_sql);
             mysqlconnection.query(insert_sql, function(err, rows, fields) {
                 if (err) logger.error('error sql: ' + insert_sql);
                 else{

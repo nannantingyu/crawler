@@ -44,8 +44,19 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/wallstreetcn/
 
 child.on('stderr', function(data) {
     logger.error(`wallstreetcn 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
+    process.kill(child.child.pid);
     child.stop();
     child.restart();
+});
+
+child.on('exit:code', function(code) {
+    process.kill(child.child.pid);
+    logger.error(`wallstreetcn 脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
+});
+
+child.on('restart', function() {
+    process.kill(child.child.pid);
+    logger.error(`wallstreetcn 重启脚本${argvs[0]}第${child.times}次，【错误发生】，时间：${moment().format("YYYY-MM-DD HH:mm:ss")}`);
 });
 
 child.on('stdout', function (content) {
@@ -76,11 +87,10 @@ child.on('stdout', function (content) {
 
     if(data && data.data && data.data.id) {
         info = {};
-        console.log("[cursor]", data.next_cursor);
         redis_client.set('next_cursor', data.next_cursor);
 
         data = data.data;
-        console.log("[Data parse]", data.content);
+        logger.info("[Data parse]", data.content);
         let now = moment().format("YYYY-MM-DD HH:mm:ss");
         info['created_time'] = now;
         info['updated_time'] = now;
