@@ -108,11 +108,11 @@ child.on('stdout', function (data) {
                 sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}', where dateid=${data.newsId};`;
             }
 
-            logger.info(insert_sql);
-            mysqlconnection.query(insert_sql, function(err, rows, fields) {
-                if (err) logger.error('error sql: ' + insert_sql);
+            logger.info(sql);
+            mysqlconnection.query(sql, function(err, rows, fields) {
+                if (err) logger.error('error sql: ' + sql);
                 else{
-                    logger.info('插入数据成功, ' + insert_sql);
+                    logger.info('插入数据成功, ' + sql);
                 }
             });
         }

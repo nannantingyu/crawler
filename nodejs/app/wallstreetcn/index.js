@@ -44,7 +44,13 @@ var child = forever.start([ 'phantomjs', path.join(root_path, 'app/wallstreetcn/
 
 child.on('stderr', function(data) {
     logger.error(`wallstreetcn 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
-    process.kill(child.child.pid);
+    try{
+        process.kill(child.child.pid);
+    }
+    catch(error) {
+        logger.error(`wallstreetcn kill pid ${child.child.pid} 失败，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
+    }
+
     child.stop();
     child.restart();
 });

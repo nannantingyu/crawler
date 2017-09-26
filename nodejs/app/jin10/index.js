@@ -7,7 +7,8 @@ const io = require('socket.io-client'),
     log4js = require('log4js'),
     request = require("request"),
     redis = require('redis'),
-    url = require('url');
+    url = require('url'),
+    querystring = require("querystring");
 
 const config = require(path.join(root_path, "config"));
     serverArr = config.jin10_server_addr,
