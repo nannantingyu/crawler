@@ -97,30 +97,33 @@ child.on('stdout', function (data) {
             info['calendar_id'] = data.idxId;
             info['country'] = data.country;
 
-            let sql = "";
-            if(data.actionType == 1) {
-                mysqlconnection.query(`select * from crawl_fx678_kuaixun where dateid = '${info['dateid']}';`, function(err, rows, fields) {
+            mysqlconnection.query(`select * from crawl_fx678_kuaixun where dateid = '${info['dateid']}';`, function(err, rows, fields) {
+                let sql = "";
+                if(data.actionType == 1) {
                     if(rows.length > 0) {
-                        sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}', where dateid=${data.newsId};`;
+                        sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}' where dateid=${data.newsId};`;
                     }
                     else {
                         sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
                     }
-                });
-            }
-            else if (data.actionType == 3) {
-                sql = `delete from crawl_fx678_kuaixun where dateid=${data.newsId};`;
-            }
-            else{
-                sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}', where dateid=${data.newsId};`;
-            }
-
-            logger.info(sql);
-            mysqlconnection.query(sql, function(err, rows, fields) {
-                if (err) logger.error('error sql: ' + sql);
-                else{
-                    logger.info('插入数据成功, ' + sql);
                 }
+                else if (data.actionType == 3) {
+                    sql = `delete from crawl_fx678_kuaixun where dateid=${data.newsId};`;
+                }
+                else{
+                    sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}' where dateid=${data.newsId};`;
+                }
+
+                logger.info(sql);
+                mysqlconnection.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        logger.error('error sql: ' + sql);
+                        console.log(err);
+                    }
+                    else{
+                        logger.info('插入数据成功, ' + sql);
+                    }
+                });
             });
         }
         else {
@@ -143,13 +146,33 @@ child.on('stdout', function (data) {
 
             info['dateid'] = data.newsId;
 
-            let insert_sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
-            logger.info(insert_sql);
-            mysqlconnection.query(insert_sql, function(err, rows, fields) {
-                if (err) logger.error('error sql: ' + insert_sql);
-                else{
-                    logger.info('插入数据成功, ' + insert_sql);
+            mysqlconnection.query(`select * from crawl_fx678_kuaixun where dateid = '${info['dateid']}';`, function(err, rows, fields) {
+                let sql = '';
+                if (data.actionType == 1){
+                    if(rows.length > 0) {
+                        sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, body='${info['body']}' where dateid=${data.newsId};`;
+                    }
+                    else {
+                        sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
+                    }
                 }
+                else if (data.actionType == 3) {
+                    sql = `delete from crawl_fx678_kuaixun where dateid=${data.newsId};`;
+                }
+                else{
+                    sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, body='${info['body']}' where dateid=${data.newsId};`;
+                }
+
+                logger.info(sql);
+                mysqlconnection.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        logger.error('error sql: ' + sql);
+                        console.log(err);
+                    }
+                    else{
+                        logger.info('插入数据成功, ' + sql);
+                    }
+                });
             });
         }
     }
