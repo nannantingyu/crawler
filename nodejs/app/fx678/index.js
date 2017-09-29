@@ -99,7 +99,14 @@ child.on('stdout', function (data) {
 
             let sql = "";
             if(data.actionType == 1) {
-                sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
+                mysqlconnection.query(`select * from crawl_fx678_kuaixun where dateid = '${info['dateid']}';`, function(err, rows, fields) {
+                    if(rows.length > 0) {
+                        sql = `update crawl_fx678_kuaixun set body='${data.newsTitle}', updated_time='${now}', importance=${info['importance']}, former_value='${info['former_value']}', predicted_value='${info['predicted_value']}', published_value='${info['published_value']}', where dateid=${data.newsId};`;
+                    }
+                    else {
+                        sql = `insert into crawl_fx678_kuaixun(${Object.keys(info).join(',')}) values('${Object.values(info).join('\',\'')}');`;
+                    }
+                });
             }
             else if (data.actionType == 3) {
                 sql = `delete from crawl_fx678_kuaixun where dateid=${data.newsId};`;
