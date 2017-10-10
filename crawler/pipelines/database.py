@@ -25,6 +25,7 @@ from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
 from crawler.models.crawl_zhanzhang import CrawlZhanzhang
 from crawler.models.crawl_jin10_article import CrawlJin10Article
 from crawler.models.crawl_article import CrawlArticle
+from crawler.models.crawl_ibrebates import Ibrebates
 import crawler.items as items
 import datetime
 
@@ -88,6 +89,30 @@ class JianKongPipeline(object):
             self.parse_jin10_article(item)
         elif spider.name in ['weibo', 'weibo_article_detail']:
             self.parse_article(item)
+        elif spider.name in ['ibrebates']:
+            self.parse_ibrebates(item)
+
+    def parse_ibrebates(self, item):
+        ibrebates = Ibrebates(**item)
+        with session_scope(self.sess) as session:
+            query = session.query(Ibrebates.id).filter(and_(
+                Ibrebates.name == ibrebates.name
+            )).one_or_none()
+
+            if query is None:
+                session.add(ibrebates)
+            else:
+                data = {}
+                update_field = ["description", "spread_type", "om_spread", "gold_spread", "offshore", "a_share", "regulatory_authority", "trading_varieties", "platform_type", "account_type", "scalp", "hedging", "min_transaction", "least_entry", "maximum_leverage", "maximum_trading", "deposit_method", "entry_method", "commission_fee", "entry_fee", "account_currency", "rollovers", "explosion_proportion", "renminbi"]
+                for field in update_field:
+                    try:
+                        attr_value = getattr(ibrebates, field)
+                        data[field] = attr_value
+                    except AttributeError as err:
+                        pass
+
+                if data:
+                    session.query(Ibrebates).filter(Ibrebates.id == query[0]).update(data)
 
     def parse_article(self, item):
         article = CrawlArticle(**item)
