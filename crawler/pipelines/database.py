@@ -170,7 +170,7 @@ class JianKongPipeline(object):
 
                         query = session.query(CrawlEconomicCalendar.id).filter(and_(
                             CrawlEconomicCalendar.source_id == crawlEconomicCalendar.source_id,
-                            CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
                         )).one_or_none()
 
                         if query is not None:
