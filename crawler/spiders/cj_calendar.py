@@ -97,8 +97,6 @@ class CjCalendarSpider(scrapy.Spider):
 
         yield all_data
         logging.info("[crawl] " + str(self.date_now.strftime("%Y-%m-%d")))
-        with open("../tmp/calendar.log", 'a') as fs:
-            fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
 
         #抓取财经事件
         yield scrapy.Request("https://rili.jin10.com/datas/{year}/{monthday}/event.json".format(year=self.date_now.year, monthday=self.date_now.strftime("%m%d")),
@@ -129,9 +127,6 @@ class CjCalendarSpider(scrapy.Spider):
 
         yield all_data
 
-        with open("../tmp/event.log", 'a') as fs:
-            fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
-
         yield scrapy.Request("https://rili.jin10.com/datas/{year}/{monthday}/holiday.json".format(year=self.date_now.year,
                                                                                                 monthday=self.date_now.strftime("%m%d")),
                              meta={"cookiejar": response.meta['cookiejar'],
@@ -155,9 +150,6 @@ class CjCalendarSpider(scrapy.Spider):
             all_index += 1
 
         yield all_data
-
-        with open("../tmp/holiday.log", 'a') as fs:
-            fs.write(self.date_now.strftime("%Y-%m-%d") + ": " + str(len(data)) + "\n")
 
         dtadd = datetime.timedelta(days=1)
         self.date_now = self.date_now + dtadd
@@ -191,9 +183,6 @@ class CjCalendarSpider(scrapy.Spider):
         dataid = dataid_re.findall(url)[-1]
         params = get_url_param(url)
         pubtime = urllib.unquote(params['pubtime'])
-
-        with open("../tmp/calendar-jiedu.log", 'a') as fs:
-            fs.write(dataid + ": " + str(response.body) + "\n")
 
         data = json.loads(response.body)
         item = CrawlEconomicCalendarItem()
