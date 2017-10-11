@@ -113,7 +113,7 @@ class CjCalendarSpider(scrapy.Spider):
             item = CrawlEconomicEventItem()
             dt_time = dt['public_time']
             if len(time_re.findall(dt_time)) > 0:
-                dt_time = self.date_now.strftime("%Y-%m-%d {ori}:00".format(ori=dt_time[0]))
+                dt_time = self.date_now.strftime("%Y-%m-%d {ori}:00".format(ori=dt_time))
 
             item['time'] = dt_time
             item['country'] = dt['country']
