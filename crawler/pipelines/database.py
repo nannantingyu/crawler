@@ -218,14 +218,39 @@ class JianKongPipeline(object):
                 all_data = []
 
                 with session_scope(self.sess) as session:
-                    crawlEconomicEvent = CrawlEconomicEvent(**item[0])
-                    session.query(CrawlEconomicEvent).filter(
-                        CrawlEconomicEvent.date == crawlEconomicEvent.date).delete()
+                    # crawlEconomicEvent = CrawlEconomicEvent(**item[0])
+                    # session.query(CrawlEconomicEvent).filter(
+                    #     CrawlEconomicEvent.date == crawlEconomicEvent.date).delete()
 
                     for ditem in item:
                         ditem = item[ditem]
                         crawlEconomicEvent = CrawlEconomicEvent(**ditem)
-                        all_data.append(crawlEconomicEvent)
+
+                        query = session.query(CrawlEconomicEvent.id).filter(and_(
+                            CrawlEconomicEvent.source_id == crawlEconomicEvent.source_id,
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query:
+                            data = {}
+                            if crawlEconomicEvent.country is not None:
+                                data['country'] = crawlEconomicEvent.country
+                            if crawlEconomicEvent.time is not None:
+                                data['time'] = crawlEconomicEvent.time
+                            if crawlEconomicEvent.city is not None:
+                                data['city'] = crawlEconomicEvent.city
+                            if crawlEconomicEvent.importance is not None:
+                                data['importance'] = crawlEconomicEvent.importance
+                            if crawlEconomicEvent.event is not None:
+                                data['event'] = crawlEconomicEvent.event
+                            if crawlEconomicEvent.date is not None:
+                                data['date'] = crawlEconomicEvent.date
+
+                            if data:
+                                session.query(CrawlEconomicEvent).filter(
+                                    CrawlEconomicEvent.id == query[0]).update(data)
+                        else:
+                            all_data.append(crawlEconomicEvent)
 
                     if len(all_data) > 0:
                         session.add_all(all_data)
@@ -234,13 +259,38 @@ class JianKongPipeline(object):
                 all_data = []
 
                 with session_scope(self.sess) as session:
-                    crawlEconomicHoliday = CrawlEconomicHoliday(**item[0])
-                    session.query(CrawlEconomicHoliday).filter(CrawlEconomicHoliday.date == crawlEconomicHoliday.date).delete()
+                    # crawlEconomicHoliday = CrawlEconomicHoliday(**item[0])
+                    # session.query(CrawlEconomicHoliday).filter(CrawlEconomicHoliday.date == crawlEconomicHoliday.date).delete()
 
                     for ditem in item:
                         ditem = item[ditem]
                         crawlEconomicHoliday = CrawlEconomicHoliday(**ditem)
-                        all_data.append(crawlEconomicHoliday)
+
+                        query = session.query(CrawlEconomicHoliday.id).filter(and_(
+                            CrawlEconomicHoliday.source_id == crawlEconomicHoliday.source_id,
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query:
+                            data = {}
+                            if crawlEconomicHoliday.country is not None:
+                                data['country'] = crawlEconomicHoliday.country
+                            if crawlEconomicHoliday.time is not None:
+                                data['time'] = crawlEconomicHoliday.time
+                            if crawlEconomicHoliday.market is not None:
+                                data['market'] = crawlEconomicHoliday.market
+                            if crawlEconomicHoliday.holiday_name is not None:
+                                data['holiday_name'] = crawlEconomicHoliday.holiday_name
+                            if crawlEconomicHoliday.detail is not None:
+                                data['detail'] = crawlEconomicHoliday.detail
+                            if crawlEconomicHoliday.date is not None:
+                                data['date'] = crawlEconomicHoliday.date
+
+                            if data:
+                                session.query(CrawlEconomicHoliday).filter(
+                                    CrawlEconomicHoliday.id == query[0]).update(data)
+                        else:
+                            all_data.append(crawlEconomicHoliday)
 
                     if len(all_data) > 0:
                         session.add_all(all_data)

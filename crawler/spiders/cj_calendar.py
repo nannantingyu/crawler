@@ -121,6 +121,7 @@ class CjCalendarSpider(scrapy.Spider):
             item['importance'] = dt['star']
             item['event'] = dt['eventcontent']
             item['date'] = self.date_now
+            item['source_id'] = dt['id']
 
             all_data[all_index] = item
             all_index += 1
@@ -145,6 +146,7 @@ class CjCalendarSpider(scrapy.Spider):
             item['holiday_name'] = dt['holidayname']
             item['detail'] = dt['note']
             item['date'] = self.date_now.strftime("%Y-%m-%d")
+            item['source_id'] = dt['id']
 
             all_data[all_index] = item
             all_index += 1

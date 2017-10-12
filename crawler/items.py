@@ -144,6 +144,7 @@ class CrawlEconomicEventItem(scrapy.Item):
     importance = scrapy.Field()
     event = scrapy.Field()
     date = scrapy.Field()
+    source_id = scrapy.Field()
 
 class CrawlEconomicHolidayItem(scrapy.Item):
     """金10财经假期"""
@@ -153,6 +154,7 @@ class CrawlEconomicHolidayItem(scrapy.Item):
     holiday_name = scrapy.Field()
     detail = scrapy.Field()
     date = scrapy.Field()
+    source_id = scrapy.Field()
 
 class ZhanzhangItem(scrapy.Item):
     """站长之家seo"""
