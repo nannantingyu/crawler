@@ -149,7 +149,7 @@ class Jin10ArticleSpider(scrapy.Spider):
 
             yield scrapy.Request(
                 main_url.format(cat=self.categories[self.cat_index]['id']),
-                meta={'cookiejar': self.name}, calback=self.parse_list)
+                meta={'cookiejar': self.name}, callback=self.parse_list)
         else:
             details_first = self.r.zrange('detail_pages', 0, 0, withscores=True)
             if len(details_first) > 0 and int(details_first[0][1]) == 0:
