@@ -7,6 +7,7 @@ from crawler.util import get_url_param
 from crawler.items import CrawlEconomicCalendarItem
 from crawler.items import CrawlEconomicEventItem
 from crawler.items import CrawlEconomicHolidayItem
+import redis
 import urllib
 import logging
 
@@ -22,6 +23,7 @@ class CjCalendarSpider(scrapy.Spider):
     jiedu_index = 0
     jiedu = None
 
+    r = redis.Redis(host="127.0.0.1", port=6379, db=0)
     custom_settings = {
         'LOG_FILE': '../logs/jin10_cj_calendar_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
     }
@@ -90,6 +92,10 @@ class CjCalendarSpider(scrapy.Spider):
             item['published_value'] = dt['actual']
             item['influence'] = dt['status_name']
             item['source_id'] = dt['dataId']
+
+            # 将已经抓过的财经日历id塞进到redis
+            if not self.r.sismember('rili:jin10', dt['dataId']):
+                self.r.sadd('rili:jin10', dt['dataId'])
 
             self.all_data.append({"dataid":dt['dataId'], 'pub_time':dt['publictime']})
             all_data[all_index] = item
