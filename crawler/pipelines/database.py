@@ -177,6 +177,8 @@ class JianKongPipeline(object):
                             data = {}
                             if crawlEconomicCalendar.country is not None:
                                 data['country'] = crawlEconomicCalendar.country
+                            if crawlEconomicCalendar.pub_time is not None:
+                                data['pub_time'] = crawlEconomicCalendar.pub_time
                             if crawlEconomicCalendar.quota_name is not None:
                                 data['quota_name'] = crawlEconomicCalendar.quota_name
                             if crawlEconomicCalendar.importance is not None:
