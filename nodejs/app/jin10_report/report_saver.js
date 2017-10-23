@@ -48,6 +48,34 @@ module.exports = {
     'parse_cftc_merchant_goods': function(data, dbname) {
         var sql = "", index = 0;
         build_cftc_merchant_goods(index, data, dbname, sql);
+    },
+    'parse_cftc_merchant_currency': function(data, dbname) {
+        var sql = "", index = 0;
+        build_cftc_merchant_currency(index, data, dbname, sql);
+    }
+}
+
+function build_cftc_merchant_currency(index, alldata, dbname, sql) {
+    if(index < alldata.length) {
+        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
+
+        redis_client.sismember(dbname, datatime, function(is_in){
+            redis_client.sadd(dbname, datatime);
+            index ++;
+            if(!is_in) {
+                for(var name in data_line) {
+                    var long_positions = data_line[name][0],
+                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
+
+                    sql += `insert into crawl_jin10_cftc_merchant_currency(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
+                }
+            }
+
+            build_cftc_merchant_currency(index, alldata, dbname, sql);
+        });
+    }
+    else if(sql) {
+        query_sql(sql);
     }
 }
 
