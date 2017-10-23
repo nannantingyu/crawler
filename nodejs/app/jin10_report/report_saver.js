@@ -36,6 +36,10 @@ module.exports = {
     'parse_cme_fx_report': function(data, dbname) {
         var sql = "", index = 0;
         build_cme_fx_report(index, data, dbname, sql);
+    },
+    'parse_lme_report': function(data, dbname) {
+        var sql = "", index = 0;
+        build_lme_report(index, data, dbname, sql);
     }
 }
 
@@ -48,6 +52,30 @@ function query_sql(sql) {
             console.log('insert success');
         }
     });
+}
+
+function build_lme_report(index, alldata, dbname, sql) {
+    if(index < alldata.length) {
+        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
+
+        redis_client.sismember(dbname, datatime, function(is_in){
+            redis_client.sadd(dbname, datatime);
+            index ++;
+            if(!is_in) {
+                for(var name in data_line) {
+                    var stock = data_line[name][0],
+                        registered_warehouse_receipt = data_line[name][1], canceled_warehouse_receipt = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
+
+                    sql += `insert into crawl_jin10_lme_report(cat_name, time, stock, registered_warehouse_receipt, canceled_warehouse_receipt, updated_time, created_time) values('${name}', '${datatime}', '${stock}', '${registered_warehouse_receipt}', '${canceled_warehouse_receipt}', '${now}', '${now}');`;
+                }
+            }
+
+            build_lme_report(index, alldata, dbname, sql);
+        });
+    }
+    else if(sql) {
+        query_sql(sql);
+    }
 }
 
 function build_cme_fx_report(index, alldata, dbname, sql) {
