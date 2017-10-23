@@ -59,7 +59,7 @@ function build_cftc_merchant_currency(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -83,7 +83,7 @@ function build_cftc_merchant_goods(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -107,7 +107,7 @@ function build_lme_traders_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -142,7 +142,7 @@ function build_lme_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -166,7 +166,7 @@ function build_cme_fx_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -191,7 +191,7 @@ function build_cme_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -216,7 +216,7 @@ function build_cftc_nc_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -240,7 +240,7 @@ function build_cftc_c_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -264,7 +264,7 @@ function build_cme_energy_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(is_in){
+        redis_client.sismember(dbname, datatime, function(err, is_in){
             redis_client.sadd(dbname, datatime);
             index ++;
             if(!is_in) {
@@ -291,7 +291,7 @@ function build_etf(index, alldata, dbname, sql) {
         for(var name in data_line) {
             var total_inventory = data_line[name][0], increase = data_line[name][1], total_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-            redis_client.sismember(dbname, datatime, function(is_in){
+            redis_client.sismember(dbname, datatime, function(err, is_in){
                 redis_client.sadd(dbname, datatime);
                 index ++;
                 if(!is_in) {
@@ -313,7 +313,7 @@ function build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
         for(var name in data_line) {
             var former_value = data_line[name][0], pub_value = data_line[name][1], expected_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-            redis_client.sismember(dbname, datatime, function(is_in){
+            redis_client.sismember(dbname, datatime, function(err, is_in){
                 redis_client.sadd(dbname, datatime);
                 index ++;
                 if(!is_in) {
