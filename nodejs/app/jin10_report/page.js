@@ -33,17 +33,12 @@ page.onLoadFinished = function(status){
         }, 2000);
     }
     else {
-        //console.log('inject');
         page.injectJs("inject.js");
         //page.injectJs("delete.js");
     }
 };
 
 page.onCallback = function(data) {
-    //path = report_dir + data.name + ".json";
-    //fs.write(path, JSON.stringify(data.value), 'w');
-    //console.log("path:" + path);
-
     console.log(JSON.stringify(data));
     phantom.exit();
 };

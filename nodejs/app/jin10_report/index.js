@@ -39,11 +39,20 @@ child.on('exit:code', function(code) {
     logger.error(`jin10_report 脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
     fs.readFile(tmp_file, 'utf8', function(err, data){
         data = JSON.parse(data);
-        //report_saver.parse_etf(data['dc_etf_sliver'], 'dc_etf_sliver');
-        //report_saver.parse_etf(data['dc_etf_gold'], 'dc_etf_gold');
-        //report_saver.parse_nonfarm_payrolls(data['dc_nonfarm_payrolls'], 'dc_nonfarm_payrolls', '美国非农就业人数');
-        //report_saver.parse_nonfarm_payrolls(data['dc_eia_crude_oil'], 'dc_eia_crude_oil', '美国EIA原油库存(万桶)');
-        report_saver.parse_nonfarm_payrolls(data['dc_cme_energy_report'], 'dc_cme_energy_report');
+        report_saver.parse_etf(data['dc_etf_sliver'], 'dc_etf_sliver');
+        report_saver.parse_etf(data['dc_etf_gold'], 'dc_etf_gold');
+        report_saver.parse_nonfarm_payrolls(data['dc_nonfarm_payrolls'], 'dc_nonfarm_payrolls', '美国非农就业人数');
+        report_saver.parse_nonfarm_payrolls(data['dc_eia_crude_oil'], 'dc_eia_crude_oil', '美国EIA原油库存(万桶)');
+        report_saver.parse_cme_energy_report(data['dc_cme_energy_report'], 'dc_cme_energy_report');
+
+        report_saver.parse_cftc_nc_report(data['dc_cftc_nc_report'], 'dc_cftc_nc_report');
+        report_saver.parse_cftc_c_report(data['dc_cftc_c_report'], 'dc_cftc_c_report');
+        report_saver.parse_cme_report(data['dc_cme_report'], 'dc_cme_report');
+        report_saver.parse_cme_fx_report(data['dc_cme_fx_report'], 'dc_cme_fx_report');
+        report_saver.parse_lme_report(data['dc_lme_report'], 'dc_lme_report');
+        report_saver.parse_lme_traders_report(data['dc_lme_traders_report'], 'dc_lme_traders_report');
+        report_saver.parse_cftc_merchant_goods(data['dc_cftc_merchant_goods'], 'dc_cftc_merchant_goods');
+        report_saver.parse_cftc_merchant_currency(data['dc_cftc_merchant_currency'], 'dc_cftc_merchant_currency');
     });
 });
 
