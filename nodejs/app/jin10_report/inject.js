@@ -2,6 +2,7 @@ var index = 0, all_types = null, all_data = {};
 
 chartIndexDb.getEntities("reportType", function(data){
     all_types = data;
+    console.log(JSON.stringify(data));
     for(var i = 0; i < data.length; i ++) {
         get_data(data[i]['name']);
     }

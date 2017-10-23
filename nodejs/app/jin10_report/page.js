@@ -18,14 +18,14 @@ var page = require('webpage').create(),
 
 var page_index = 0;
 function callback(status){
-    console.log(status);
+    //console.log(status);
 }
 
 page.open(page_queue[page_index], callback);
 
 page.onLoadFinished = function(status){
     page_index ++;
-    console.log(page_index, status, page_queue[page_index]);
+    //console.log(page_index, status, page_queue[page_index]);
     if(page_index < page_queue.length) {
         setTimeout(function(){
             //console.log(page_queue[page_index]);

@@ -41,8 +41,8 @@ child.on('exit:code', function(code) {
         data = JSON.parse(data);
         //report_saver.parse_etf(data['dc_etf_sliver'], 'dc_etf_sliver');
         //report_saver.parse_etf(data['dc_etf_gold'], 'dc_etf_gold');
-        report_saver.parse_nonfarm_payrolls(data['dc_nonfarm_payrolls'], 'dc_nonfarm_payrolls');
-        report_saver.parse_nonfarm_payrolls(data['dc_eia_crude_oil'], 'dc_eia_crude_oil');
+        report_saver.parse_nonfarm_payrolls(data['dc_nonfarm_payrolls'], 'dc_nonfarm_payrolls', '美国非农就业人数');
+        report_saver.parse_nonfarm_payrolls(data['dc_eia_crude_oil'], 'dc_eia_crude_oil', '美国EIA原油库存(万桶)');
     });
 });
 

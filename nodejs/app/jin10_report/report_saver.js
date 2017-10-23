@@ -13,9 +13,9 @@ module.exports = {
         var sql = "", index = 0;
         build_etf(index, data, dbname, sql);
     },
-    'parse_nonfarm_payrolls': function(data, dbname) {
+    'parse_nonfarm_payrolls': function(data, dbname, cat_name) {
         var sql = "", index = 0;
-        build_nonfarm_payrolls(index, data, dbname, sql);
+        build_nonfarm_payrolls(index, data, dbname, cat_name, sql);
     }
 }
 
@@ -52,7 +52,7 @@ function build_etf(index, alldata, dbname, sql) {
     }
 }
 
-function build_nonfarm_payrolls(index, alldata, dbname, sql) {
+function build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
         for(var name in data_line) {
@@ -62,7 +62,7 @@ function build_nonfarm_payrolls(index, alldata, dbname, sql) {
                 redis_client.sadd(dbname, datatime);
                 index ++;
                 if(!is_in) {
-                    sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
+                    sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${cat_name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
                 }
 
                 build_nonfarm_payrolls(index, alldata, dbname, sql);
