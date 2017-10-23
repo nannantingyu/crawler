@@ -13,9 +13,13 @@ module.exports = {
         var sql = "", index = 0;
         build_etf(index, data, dbname, sql);
     },
-    'parse_nonfarm_payrolls': function(data, dbname) {
+    'parse_nonfarm_payrolls': function(data, dbname, cat_name) {
         var sql = "", index = 0;
-        build_nonfarm_payrolls(index, data, dbname, sql);
+        build_nonfarm_payrolls(index, data, dbname, cat_name, sql);
+    },
+    'parse_cme_energy_report': function(data, dbname) {
+        var sql = "", index = 0;
+        build_cme_energy_report(index, data, dbname, sql);
     }
 }
 
@@ -90,7 +94,7 @@ function build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
                     sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${cat_name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
                 }
 
-                build_nonfarm_payrolls(index, alldata, dbname, sql);
+                build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql);
             });
         }
     }
