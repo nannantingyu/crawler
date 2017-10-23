@@ -28,6 +28,10 @@ module.exports = {
     'parse_cftc_c_report': function(data, dbname) {
         var sql = "", index = 0;
         build_cftc_c_report(index, data, dbname, sql);
+    },
+    'parse_cme_report': function(data, dbname) {
+        var sql = "", index = 0;
+        build_cme_report(index, data, dbname, sql);
     }
 }
 
@@ -40,6 +44,31 @@ function query_sql(sql) {
             console.log('insert success');
         }
     });
+}
+
+function build_cme_report(index, alldata, dbname, sql) {
+    if(index < alldata.length) {
+        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
+
+        redis_client.sismember(dbname, datatime, function(is_in){
+            redis_client.sadd(dbname, datatime);
+            index ++;
+            if(!is_in) {
+                for(var name in data_line) {
+                    var cat = name.split('-'), cat_name = cat[0], type_name = cat[1], transaction_contract = data_line[name][0],
+                        inside_closing_contract = data_line[name][1], outside_closing_contract = data_line[name][2],
+                        volume = data_line[name][3], open_contract = data_line[name][4], position_change = data_line[name][5], now = moment().format("YYYY-MM-DD HH:mm:ss");
+
+                    sql += `insert into crawl_jin10_cme_report(cat_name, type_name, time, transaction_contract, inside_closing_contract, outside_closing_contract, volume, open_contract, position_change, updated_time, created_time) values('${cat_name}', '${type_name}', '${datatime}', '${transaction_contract}', '${inside_closing_contract}', '${outside_closing_contract}', '${volume}', '${open_contract}', '${position_change}', '${now}', '${now}');`;
+                }
+            }
+
+            build_cme_report(index, alldata, dbname, sql);
+        });
+    }
+    else if(sql) {
+        query_sql(sql);
+    }
 }
 
 function build_cftc_nc_report(index, alldata, dbname, sql) {
