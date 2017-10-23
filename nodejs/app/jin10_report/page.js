@@ -2,18 +2,18 @@ var fs = require('fs'), report_dir = "data/jin10_report/";
 var page = require('webpage').create(),
     page_queue = [
         'https://datacenter.jin10.com/reportType/dc_etf_gold',
-        'https://datacenter.jin10.com/reportType/dc_etf_sliver',
-        'https://datacenter.jin10.com/reportType/dc_nonfarm_payrolls',
-        'https://datacenter.jin10.com/reportType/dc_eia_crude_oil',
-        'https://datacenter.jin10.com/reportType/dc_cme_energy_report',
-        'https://datacenter.jin10.com/reportType/dc_cftc_nc_report',
-        'https://datacenter.jin10.com/reportType/dc_cftc_c_report',
-        'https://datacenter.jin10.com/reportType/dc_cme_report',
-        'https://datacenter.jin10.com/reportType/dc_cme_fx_report',
-        'https://datacenter.jin10.com/reportType/dc_lme_report',
-        'https://datacenter.jin10.com/reportType/dc_lme_traders_report',
-        'https://datacenter.jin10.com/reportType/dc_cftc_merchant_goods',
-        'https://datacenter.jin10.com/reportType/dc_cftc_merchant_currency'
+        //'https://datacenter.jin10.com/reportType/dc_etf_sliver',
+        //'https://datacenter.jin10.com/reportType/dc_nonfarm_payrolls',
+        //'https://datacenter.jin10.com/reportType/dc_eia_crude_oil',
+        //'https://datacenter.jin10.com/reportType/dc_cme_energy_report',
+        //'https://datacenter.jin10.com/reportType/dc_cftc_nc_report',
+        //'https://datacenter.jin10.com/reportType/dc_cftc_c_report',
+        //'https://datacenter.jin10.com/reportType/dc_cme_report',
+        //'https://datacenter.jin10.com/reportType/dc_cme_fx_report',
+        //'https://datacenter.jin10.com/reportType/dc_lme_report',
+        //'https://datacenter.jin10.com/reportType/dc_lme_traders_report',
+        //'https://datacenter.jin10.com/reportType/dc_cftc_merchant_goods',
+        //'https://datacenter.jin10.com/reportType/dc_cftc_merchant_currency'
     ];
 
 var page_index = 0;
