@@ -39,6 +39,7 @@ function query_sql(sql) {
 }
 
 function build_cftc_nc_report(index, alldata, dbname, sql) {
+    console.log(index, alldata);
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
@@ -54,7 +55,7 @@ function build_cftc_nc_report(index, alldata, dbname, sql) {
                 }
             }
 
-            build_cme_energy_report(index, alldata, dbname, sql);
+            build_cftc_nc_report(index, alldata, dbname, sql);
         });
     }
     else if(sql) {
