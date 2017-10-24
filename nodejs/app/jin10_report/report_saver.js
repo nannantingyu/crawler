@@ -95,20 +95,21 @@ function build_dc_lme_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var stock = data_line[name][0],
-                        registered_warehouse_receipt = data_line[name][1], canceled_warehouse_receipt = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
+        redis_client.get(dbname, function(err, dt){
+            if(line.date > dt) {
+                redis_client.set(dbname, line.date);
+            }
 
-                    sql += `insert into crawl_jin10_lme_report(cat_name, time, stock, registered_warehouse_receipt, canceled_warehouse_receipt, updated_time, created_time) values('${name}', '${datatime}', '${stock}', '${registered_warehouse_receipt}', '${canceled_warehouse_receipt}', '${now}', '${now}');`;
-                }
+            index ++;
+            for(var name in data_line) {
+                var stock = data_line[name][0],
+                    registered_warehouse_receipt = data_line[name][1], canceled_warehouse_receipt = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
+
+                sql += `insert into crawl_jin10_lme_report(cat_name, time, stock, registered_warehouse_receipt, canceled_warehouse_receipt, updated_time, created_time) values('${name}', '${datatime}', '${stock}', '${registered_warehouse_receipt}', '${canceled_warehouse_receipt}', '${now}', '${now}');`;
             }
 
             build_dc_lme_report(index, alldata, dbname, sql);
-        });
+        }
     }
     else if(sql) {
         console.log(maps['build_' + dbname]);
@@ -146,19 +147,20 @@ function build_contract(index, alldata, dbname, sql){
 function build_etf(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = line.dataTime, data_line = line.datas;
-        for(var name in data_line) {
-            var total_inventory = data_line[name][0], increase = data_line[name][1], total_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-            redis_client.sismember(dbname, datatime, function(err, is_in){
-                redis_client.sadd(dbname, datatime);
-                index ++;
-                if(!is_in) {
-                    sql += `insert into crawl_jin10_etf(cat_name, time, total_inventory, increase, total_value, updated_time, created_time) values('${name}', '${datatime}', '${total_inventory}', '${increase}', '${total_value}', '${now}', '${now}');`;
-                }
+        redis_client.get(dbname, function(err, dt) {
+            if (line.date > dt) {
+                redis_client.set(dbname, line.date);
+            }
 
-                build_etf(index, alldata, dbname, sql);
-            });
-        }
+            for(var name in data_line) {
+                var total_inventory = data_line[name][0], increase = data_line[name][1], total_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
+                sql += `insert into crawl_jin10_etf(cat_name, time, total_inventory, increase, total_value, updated_time, created_time) values('${name}', '${datatime}', '${total_inventory}', '${increase}', '${total_value}', '${now}', '${now}');`;
+            }
+
+            index ++;
+            build_etf(index, alldata, dbname, sql);
+        });
     }
     else if(sql) {
         console.log(maps['build_' + dbname]);
@@ -169,19 +171,20 @@ function build_etf(index, alldata, dbname, sql) {
 function build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-        for(var name in data_line) {
-            var former_value = data_line[name][0], pub_value = data_line[name][1], expected_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-            redis_client.sismember(dbname, datatime, function(err, is_in){
-                redis_client.sadd(dbname, datatime);
-                index ++;
-                if(!is_in) {
-                    sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${cat_name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
-                }
+        redis_client.get(dbname, function(err, dt) {
+            if (line.date > dt) {
+                redis_client.set(dbname, line.date);
+            }
 
-                build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql);
-            });
-        }
+            index ++;
+            for(var name in data_line) {
+                var former_value = data_line[name][0], pub_value = data_line[name][1], expected_value = data_line[name][2], now = moment().format("YYYY-MM-DD HH:mm:ss");
+                sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${cat_name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
+            }
+
+            build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql);
+        });
     }
     else if(sql) {
         console.log(maps['build_' + dbname]);
