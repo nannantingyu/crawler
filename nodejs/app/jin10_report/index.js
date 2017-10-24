@@ -23,14 +23,15 @@ if(fs.existsSync(tmp_file)) {
 var child_process = require('child_process');
 var spawnObj = child_process.spawn('phantomjs', [path.join(root_path, 'app/jin10_report/page.js')], {encoding: 'utf-8'});
 
-spawnObj.stdout.on('data', function(chunk) {
+spawnObj.stdout.on('data', function(content) {
     var content = content.toString();
     fs.appendFileSync(tmp_file, content, 'utf8');
 });
 spawnObj.stderr.on('data', (data) => {
     logger.error(`jin10_report 发生错误，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
     try{
-        process.kill(child.child.pid);
+	console.log(spawnObj);
+        //process.kill(child.child.pid);
     }
     catch(error) {
         logger.error(`jin10_report kill pid ${child.child.pid} 失败，时间${moment().format("YYYY-MM-DD HH:mm:ss")}, 错误：${data}`);
@@ -38,6 +39,7 @@ spawnObj.stderr.on('data', (data) => {
 });
 spawnObj.on('close', function(code) {
     console.log('close code : ' + code);
+    process.exit();
 });
 
 spawnObj.on('exit', (code) => {
