@@ -26,6 +26,7 @@ from crawler.models.crawl_zhanzhang import CrawlZhanzhang
 from crawler.models.crawl_jin10_article import CrawlJin10Article
 from crawler.models.crawl_article import CrawlArticle
 from crawler.models.crawl_ibrebates import Ibrebates
+from crawler.models.crawl_ssi_trend import CrawlSsiTrend
 import crawler.items as items
 import datetime
 
@@ -91,6 +92,30 @@ class JianKongPipeline(object):
             self.parse_article(item)
         elif spider.name in ['ibrebates']:
             self.parse_ibrebates(item)
+        elif spider.name in ['jin10_ssi_trends']:
+            self.parse_ssi_trends(item)
+
+    def parse_ssi_trends(self, item):
+        with session_scope(self.sess) as session:
+
+            query = session.query(func.max(CrawlSsiTrend.time).label("max_time")).filter(
+                and_(
+                    CrawlSsiTrend.type == item[0]['type'],
+                    CrawlSsiTrend.platform == item[0]['platform'],
+                )
+            ).one_or_none()
+
+            max_time = query[0] if query else None
+
+            all_item = []
+            for it in item:
+                if max_time is None or item[it]['time'] > max_time.strftime('%Y-%m-%d %H:%M:%I'):
+                    print item[it]['time'], max_time.strftime('%Y-%m-%d %H:%M:%I') if max_time else max_time
+                    crawlSSiTrend = CrawlSsiTrend(**item[it])
+                    all_item.append(crawlSSiTrend)
+
+            if len(all_item) > 0:
+                session.add_all(all_item)
 
     def parse_ibrebates(self, item):
         ibrebates = Ibrebates(**item)

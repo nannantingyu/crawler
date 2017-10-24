@@ -208,3 +208,9 @@ class IbrebatesItem(scrapy.Item):
     rollovers = scrapy.Field()
     explosion_proportion = scrapy.Field()
     renminbi = scrapy.Field()
+
+class SsiTrendsItem(scrapy.Item):
+    time = scrapy.Field()
+    platform = scrapy.Field()
+    type = scrapy.Field()
+    long_position = scrapy.Field()
