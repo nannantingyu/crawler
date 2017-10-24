@@ -8,18 +8,18 @@ const mysql = require('mysql'),
     redis_client = redis.createClient(config.redis.port, config.redis.server),
     fs = require('fs');
 
-const positions = {
-    'build_dc_cftc_merchant_currency': 'build_position',
-    'build_dc_cftc_merchant_goods': 'build_position',
-    'build_dc_lme_traders_report': 'build_position',
-    'build_dc_cftc_nc_report': 'build_position',
-    'build_dc_cftc_c_report': 'build_position',
-    'build_dc_cme_fx_report': 'build_contract',
-    'build_dc_cme_report': 'build_contract',
-    'build_dc_cme_energy_report': 'build_contract',
-    'build_etf': 'build_etf',
-    'build_dc_lme_report': 'build_dc_lme_report',
-    'build_dc_nonfarm_payrolls': 'build_dc_nonfarm_payrolls'
+const maps = {
+    'build_dc_cftc_merchant_currency': build_position,
+    'build_dc_cftc_merchant_goods': build_position,
+    'build_dc_lme_traders_report': build_position,
+    'build_dc_cftc_nc_report': build_position,
+    'build_dc_cftc_c_report': build_position,
+    'build_dc_cme_fx_report': build_contract,
+    'build_dc_cme_report': build_contract,
+    'build_dc_cme_energy_report': build_contract,
+    'build_etf': build_etf,
+    'build_dc_lme_report': build_dc_lme_report,
+    'build_dc_nonfarm_payrolls': build_dc_nonfarm_payrolls
 };
 
 function build(data, dbname) {
@@ -30,7 +30,7 @@ function build(data, dbname) {
 
         console.log(dbname, datedb);
 
-        positions['build_' + dbname](0, data.filter(function(line){
+        maps['build_' + dbname](0, data.filter(function(line){
             return line.date >= datedb;
         }), dbname, '');
     });
