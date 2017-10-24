@@ -40,7 +40,9 @@ module.exports = {
     'parse_etf': build,
     'parse_nonfarm_payrolls': function(data, dbname, cat_name) {
         var sql = "", index = 0;
-        build_dc_nonfarm_payrolls(index, data, dbname, cat_name, sql);
+        build_dc_nonfarm_payrolls(index, data.filter(function(line){
+            return line.date > datedb;
+        }), dbname, cat_name, sql);
     },
     'parse_cme_energy_report': build,
     'parse_cftc_nc_report': build,
