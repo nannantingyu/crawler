@@ -30,7 +30,7 @@ function build(data, dbname) {
 
         console.log(dbname, datedb);
 
-        window[positions['build_' + dbname]](0, data.filter(function(line){
+        positions['build_' + dbname](0, data.filter(function(line){
             return line.date >= datedb;
         }), dbname, '');
     });
