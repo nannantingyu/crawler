@@ -19,7 +19,7 @@ const positions = {
     'build_dc_cme_energy_report': 'build_contract',
     'build_etf': 'build_etf',
     'build_dc_lme_report': 'build_dc_lme_report',
-    'build_dc_nonfarm_payrolls', 'build_dc_nonfarm_payrolls'
+    'build_dc_nonfarm_payrolls': 'build_dc_nonfarm_payrolls'
 };
 
 function build(data, dbname) {
