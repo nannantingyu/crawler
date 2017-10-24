@@ -31,7 +31,7 @@ function build(data, dbname) {
 
 
         maps['build_' + dbname](0, data.filter(function(line){
-            return line.date >= datedb;
+            return line.date > datedb;
         }), dbname, '');
     });
 }
@@ -80,6 +80,7 @@ function build_position(index, alldata, dbname, sql) {
 }
 
 function query_sql(sql) {
+    console.log(sql);
     mysqlconnection.query(sql, function(err, rows, fields){
         if(err) {
             console.log('insert failed, ', err);
