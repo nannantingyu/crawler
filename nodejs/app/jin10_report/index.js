@@ -42,16 +42,7 @@ child.on('exit:code', function(code) {
     fs.readFile(tmp_file, 'utf8', function(err, data){
         data = JSON.parse(data);
 
-        redis_client.get('dc_etf_sliver', function(err, datedb){
-            if(!datedb) {
-                datedb = '19700101';
-            }
-
-            report_saver.parse_etf(data['dc_etf_sliver'].filter(function(line){
-                return line.date >= datedb;
-            }), 'dc_etf_sliver');
-        });
-
+        report_saver.parse_etf(data['dc_etf_sliver'], 'dc_etf_sliver');
         report_saver.parse_etf(data['dc_etf_gold'], 'dc_etf_gold');
         report_saver.parse_nonfarm_payrolls(data['dc_nonfarm_payrolls'], 'dc_nonfarm_payrolls', '美国非农就业人数');
         report_saver.parse_nonfarm_payrolls(data['dc_eia_crude_oil'], 'dc_eia_crude_oil', '美国EIA原油库存(万桶)');
