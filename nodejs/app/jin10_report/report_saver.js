@@ -17,8 +17,8 @@ const maps = {
     'build_dc_cme_fx_report': build_contract,
     'build_dc_cme_report': build_contract,
     'build_dc_cme_energy_report': build_contract,
-    'dc_etf_sliver': build_etf,
-    'dc_etf_gold': build_etf,
+    'build_dc_etf_sliver': build_etf,
+    'build_dc_etf_gold': build_etf,
     'build_dc_lme_report': build_dc_lme_report,
     'build_dc_nonfarm_payrolls': build_dc_nonfarm_payrolls
 };
@@ -29,7 +29,6 @@ function build(data, dbname) {
             datedb = '19700101';
         }
 
-        console.log(dbname, datedb);
 
         maps['build_' + dbname](0, data.filter(function(line){
             return line.date >= datedb;
@@ -61,7 +60,6 @@ function build_position(index, alldata, dbname, sql) {
         redis_client.get(dbname, function(err, dt){
             if(line.date > dt) {
                 redis_client.set(dbname, line.date);
-                console.log(dbname, line.date);
             }
 
             index ++;
@@ -76,6 +74,7 @@ function build_position(index, alldata, dbname, sql) {
         });
     }
     else if(sql) {
+        console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
 }
@@ -111,6 +110,7 @@ function build_dc_lme_report(index, alldata, dbname, sql) {
         });
     }
     else if(sql) {
+        console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
 }
@@ -137,6 +137,7 @@ function build_contract(index, alldata, dbname, sql){
         });
     }
     else if(sql) {
+        console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
 }
@@ -159,6 +160,7 @@ function build_etf(index, alldata, dbname, sql) {
         }
     }
     else if(sql) {
+        console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
 }
@@ -181,6 +183,7 @@ function build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
         }
     }
     else if(sql) {
+        console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
 }
