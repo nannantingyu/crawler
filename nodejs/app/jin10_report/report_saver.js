@@ -8,118 +8,70 @@ const mysql = require('mysql'),
     redis_client = redis.createClient(config.redis.port, config.redis.server),
     fs = require('fs');
 
+const positions = {
+    'build_dc_cftc_merchant_currency': 'build_position',
+    'build_dc_cftc_merchant_goods': 'build_position',
+    'build_dc_lme_traders_report': 'build_position',
+    'build_dc_cftc_nc_report': 'build_position',
+    'build_dc_cftc_c_report': 'build_position',
+    'build_dc_cme_fx_report': 'build_contract',
+    'build_dc_cme_report': 'build_contract',
+    'build_dc_cme_energy_report': 'build_contract',
+    'build_etf': 'build_etf',
+    'build_dc_lme_report': 'build_dc_lme_report',
+    'build_dc_nonfarm_payrolls', 'build_dc_nonfarm_payrolls'
+};
+
+function build(data, dbname) {
+    redis_client.get(dbname, function(err, datedb){
+        if(!datedb) {
+            datedb = '19700101';
+        }
+
+        console.log(dbname, datedb);
+
+        window[positions['build_' + dbname]](0, data.filter(function(line){
+            return line.date >= datedb;
+        }), dbname, '');
+    });
+}
+
 module.exports = {
-    'parse_etf': function(data, dbname) {
-        var sql = "", index = 0;
-        build_etf(index, data, dbname, sql);
-    },
+    'parse_etf': build,
     'parse_nonfarm_payrolls': function(data, dbname, cat_name) {
         var sql = "", index = 0;
-        build_nonfarm_payrolls(index, data, dbname, cat_name, sql);
+        build_dc_nonfarm_payrolls(index, data, dbname, cat_name, sql);
     },
-    'parse_cme_energy_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cme_energy_report(index, data, dbname, sql);
-    },
-    'parse_cftc_nc_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cftc_nc_report(index, data, dbname, sql);
-    },
-    'parse_cftc_c_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cftc_c_report(index, data, dbname, sql);
-    },
-    'parse_cme_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cme_report(index, data, dbname, sql);
-    },
-    'parse_cme_fx_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cme_fx_report(index, data, dbname, sql);
-    },
-    'parse_lme_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_lme_report(index, data, dbname, sql);
-    },
-    'parse_lme_traders_report': function(data, dbname) {
-        var sql = "", index = 0;
-        build_lme_traders_report(index, data, dbname, sql);
-    },
-    'parse_cftc_merchant_goods': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cftc_merchant_goods(index, data, dbname, sql);
-    },
-    'parse_cftc_merchant_currency': function(data, dbname) {
-        var sql = "", index = 0;
-        build_cftc_merchant_currency(index, data, dbname, sql);
-    }
+    'parse_cme_energy_report': build,
+    'parse_cftc_nc_report': build,
+    'parse_cftc_c_report': build,
+    'parse_cme_report': build,
+    'parse_cme_fx_report': build,
+    'parse_lme_report': build,
+    'parse_lme_traders_report': build,
+    'parse_cftc_merchant_goods': build,
+    'parse_cftc_merchant_currency': build
 }
 
-function build_cftc_merchant_currency(index, alldata, dbname, sql) {
+function build_position(index, alldata, dbname, sql) {
     if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
+        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas, tb_name = 'crawl_jin10_' + dbname.replace('dc_', '');
 
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var long_positions = data_line[name][0],
-                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_cftc_merchant_currency(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
-                }
+        redis_client.get(dbname, function(err, dt){
+            if(line.date > dt) {
+                redis_client.set(dbname, line.date);
+                console.log(dbname, line.date);
             }
 
-            build_cftc_merchant_currency(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_cftc_merchant_goods(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
             index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var long_positions = data_line[name][0],
-                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
+            for(var name in data_line) {
+                var long_positions = data_line[name][0],
+                    short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-                    sql += `insert into crawl_jin10_cftc_merchant_goods(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
-                }
+                sql += `insert into ${tb_name}(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
             }
 
-            build_cftc_merchant_goods(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_lme_traders_report(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var long_positions = data_line[name][0],
-                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_lme_traders_report(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
-                }
-            }
-
-            build_lme_traders_report(index, alldata, dbname, sql);
+            build_position(index, alldata, dbname, sql);
         });
     }
     else if(sql) {
@@ -138,7 +90,7 @@ function query_sql(sql) {
     });
 }
 
-function build_lme_report(index, alldata, dbname, sql) {
+function build_dc_lme_report(index, alldata, dbname, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
 
@@ -154,7 +106,7 @@ function build_lme_report(index, alldata, dbname, sql) {
                 }
             }
 
-            build_lme_report(index, alldata, dbname, sql);
+            build_dc_lme_report(index, alldata, dbname, sql);
         });
     }
     else if(sql) {
@@ -162,122 +114,25 @@ function build_lme_report(index, alldata, dbname, sql) {
     }
 }
 
-function build_cme_fx_report(index, alldata, dbname, sql) {
+function build_contract(index, alldata, dbname, sql){
     if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
+        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas, tb_name = 'crawl_jin10_' + dbname.replace('dc_', '');
 
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var cat = name.split('-'), cat_name = cat[0], type_name = cat[1], transaction_contract = data_line[name][0],
-                        inside_closing_contract = data_line[name][1], outside_closing_contract = data_line[name][2],
-                        volume = data_line[name][3], open_contract = data_line[name][4], position_change = data_line[name][5], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_cme_fx_report(cat_name, type_name, time, transaction_contract, inside_closing_contract, outside_closing_contract, volume, open_contract, position_change, updated_time, created_time) values('${cat_name}', '${type_name}', '${datatime}', '${transaction_contract}', '${inside_closing_contract}', '${outside_closing_contract}', '${volume}', '${open_contract}', '${position_change}', '${now}', '${now}');`;
-                }
+        redis_client.get(dbname, function(err, dt){
+            if(line.date > dt) {
+                redis_client.set(dbname, line.date);
             }
 
-            build_cme_fx_report(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_cme_report(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
             index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var cat = name.split('-'), cat_name = cat[0], type_name = cat[1], transaction_contract = data_line[name][0],
-                        inside_closing_contract = data_line[name][1], outside_closing_contract = data_line[name][2],
-                        volume = data_line[name][3], open_contract = data_line[name][4], position_change = data_line[name][5], now = moment().format("YYYY-MM-DD HH:mm:ss");
+            for(var name in data_line) {
+                var cat = name.split('-'), cat_name = cat[0], type_name = cat[1], transaction_contract = data_line[name][0],
+                    inside_closing_contract = data_line[name][1], outside_closing_contract = data_line[name][2],
+                    volume = data_line[name][3], open_contract = data_line[name][4], position_change = data_line[name][5], now = moment().format("YYYY-MM-DD HH:mm:ss");
 
-                    sql += `insert into crawl_jin10_cme_report(cat_name, type_name, time, transaction_contract, inside_closing_contract, outside_closing_contract, volume, open_contract, position_change, updated_time, created_time) values('${cat_name}', '${type_name}', '${datatime}', '${transaction_contract}', '${inside_closing_contract}', '${outside_closing_contract}', '${volume}', '${open_contract}', '${position_change}', '${now}', '${now}');`;
-                }
+                sql += `insert into ${tb_name}(cat_name, type_name, time, transaction_contract, inside_closing_contract, outside_closing_contract, volume, open_contract, position_change, updated_time, created_time) values('${cat_name}', '${type_name}', '${datatime}', '${transaction_contract}', '${inside_closing_contract}', '${outside_closing_contract}', '${volume}', '${open_contract}', '${position_change}', '${now}', '${now}');`;
             }
 
-            build_cme_report(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_cftc_nc_report(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var long_positions = data_line[name][0],
-                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_cftc_nc_report(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
-                }
-            }
-
-            build_cftc_nc_report(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_cftc_c_report(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var long_positions = data_line[name][0],
-                        short_position = data_line[name][1], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_cftc_c_report(cat_name, time, long_positions, short_position, updated_time, created_time) values('${name}', '${datatime}', '${long_positions}', '${short_position}', '${now}', '${now}');`;
-                }
-            }
-
-            build_cftc_c_report(index, alldata, dbname, sql);
-        });
-    }
-    else if(sql) {
-        query_sql(sql);
-    }
-}
-
-function build_cme_energy_report(index, alldata, dbname, sql) {
-    if(index < alldata.length) {
-        var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
-
-        redis_client.sismember(dbname, datatime, function(err, is_in){
-            redis_client.sadd(dbname, datatime);
-            index ++;
-            if(!is_in) {
-                for(var name in data_line) {
-                    var cat = name.split('-'), cat_name = cat[0], type_name = cat[1], transaction_contract = data_line[name][0],
-                        inside_closing_contract = data_line[name][1], outside_closing_contract = data_line[name][2],
-                        volume = data_line[name][3], open_contract = data_line[name][4], position_change = data_line[name][5], now = moment().format("YYYY-MM-DD HH:mm:ss");
-
-                    sql += `insert into crawl_jin10_cme_energy_report(cat_name, type_name, time, transaction_contract, inside_closing_contract, outside_closing_contract, volume, open_contract, position_change, updated_time, created_time) values('${cat_name}', '${type_name}', '${datatime}', '${transaction_contract}', '${inside_closing_contract}', '${outside_closing_contract}', '${volume}', '${open_contract}', '${position_change}', '${now}', '${now}');`;
-                }
-            }
-
-            build_cme_energy_report(index, alldata, dbname, sql);
+            build_contract(index, alldata, dbname, sql);
         });
     }
     else if(sql) {
@@ -307,7 +162,7 @@ function build_etf(index, alldata, dbname, sql) {
     }
 }
 
-function build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
+function build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
     if(index < alldata.length) {
         var line = alldata[index], datatime = moment(line.date).format('YYYY-MM-DD 00:00:00'), data_line = line.datas;
         for(var name in data_line) {
@@ -320,7 +175,7 @@ function build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
                     sql += `insert into crawl_jin10_nonfarm_payrolls(cat_name, time, former_value, pub_value, expected_value, updated_time, created_time) values('${cat_name}', '${datatime}', '${former_value}', '${pub_value}', '${expected_value}', '${now}', '${now}');`;
                 }
 
-                build_nonfarm_payrolls(index, alldata, dbname, cat_name, sql);
+                build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql);
             });
         }
     }
