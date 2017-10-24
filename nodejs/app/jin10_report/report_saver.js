@@ -109,7 +109,7 @@ function build_dc_lme_report(index, alldata, dbname, sql) {
             }
 
             build_dc_lme_report(index, alldata, dbname, sql);
-        }
+        });
     }
     else if(sql) {
         console.log(maps['build_' + dbname]);
