@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2017-10-24 08:44:49
+Date: 2017-10-24 16:13:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -251,9 +251,11 @@ CREATE TABLE `crawl_jin10_ssi_trends` (
   `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
   `updated_time` datetime NOT NULL,
   `created_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
 
 -- ----------------------------
