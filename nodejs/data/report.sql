@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2017-10-24 16:13:33
+Date: 2017-10-25 15:11:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -260,4 +260,184 @@ CREATE TABLE `crawl_jin10_ssi_trends` (
 
 -- ----------------------------
 -- Records of crawl_jin10_ssi_trends
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_alpari`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_alpari`;
+CREATE TABLE `crawl_jin10_ssi_trends_alpari` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_alpari
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_dukscopy`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_dukscopy`;
+CREATE TABLE `crawl_jin10_ssi_trends_dukscopy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_dukscopy
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_fiboforx`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_fiboforx`;
+CREATE TABLE `crawl_jin10_ssi_trends_fiboforx` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_fiboforx
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_forxfact`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_forxfact`;
+CREATE TABLE `crawl_jin10_ssi_trends_forxfact` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_forxfact
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_ftroanda`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_ftroanda`;
+CREATE TABLE `crawl_jin10_ssi_trends_ftroanda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_ftroanda
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_fxcm`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_fxcm`;
+CREATE TABLE `crawl_jin10_ssi_trends_fxcm` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_fxcm
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_instfor`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_instfor`;
+CREATE TABLE `crawl_jin10_ssi_trends_instfor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_instfor
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_myfxbook`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_myfxbook`;
+CREATE TABLE `crawl_jin10_ssi_trends_myfxbook` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_myfxbook
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `crawl_jin10_ssi_trends_saxobank`
+-- ----------------------------
+DROP TABLE IF EXISTS `crawl_jin10_ssi_trends_saxobank`;
+CREATE TABLE `crawl_jin10_ssi_trends_saxobank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `platform` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `long_position` decimal(4,2) NOT NULL,
+  `time` datetime NOT NULL,
+  `updated_time` datetime NOT NULL,
+  `created_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='投机情绪报告';
+
+-- ----------------------------
+-- Records of crawl_jin10_ssi_trends_saxobank
 -- ----------------------------
