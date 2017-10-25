@@ -102,6 +102,7 @@ function query_sql(sql) {
     if(!querying && sql_queue.length > 0) {
         querying = true;
         all_sql = sql_queue.join('');
+        sql_queue.length = 0;
 
         mysqlconnection.query(all_sql, function(err, rows, fields){
             if(err) {
