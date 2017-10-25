@@ -103,6 +103,7 @@ function query_sql(sql) {
             console.log("write sql");
         });
 
+        querying = true;
         mysqlconnection.query(all_sql, function(err, rows, fields){
             if(err) {
                 console.log('insert failed, ', err);
@@ -111,6 +112,7 @@ function query_sql(sql) {
                 console.log('insert success');
             }
 
+            querying = false;
             query_sql();
         });
     }
