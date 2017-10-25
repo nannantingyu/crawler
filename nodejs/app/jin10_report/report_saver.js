@@ -93,6 +93,8 @@ function build_position(index, alldata, dbname, sql) {
 }
 
 function query_sql(sql) {
+    console.log("add sql");
+
     if(sql) {
         sql_queue.push(sql);
     }
