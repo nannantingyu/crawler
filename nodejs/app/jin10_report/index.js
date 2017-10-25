@@ -38,12 +38,11 @@ spawnObj.stderr.on('data', (data) => {
     }
 });
 spawnObj.on('close', function(code) {
-    console.log('close code : ' + code);
+    //console.log('close code : ' + code);
     //process.exit();
 });
 
 spawnObj.on('exit', (code) => {
-    logger.error(`jin10_report 脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
     fs.readFile(tmp_file, 'utf8', function(err, data){
         data = JSON.parse(data);
 
@@ -62,6 +61,8 @@ spawnObj.on('exit', (code) => {
         report_saver.parse_cftc_merchant_goods(data['dc_cftc_merchant_goods'], 'dc_cftc_merchant_goods');
         report_saver.parse_cftc_merchant_currency(data['dc_cftc_merchant_currency'], 'dc_cftc_merchant_currency');
     });
+
+    logger.error(`jin10_report 脚本退出，时间${moment().format("YYYY-MM-DD HH:mm:ss")}`);
 });
 
 //var child = forever.start([ 'phantomjs', path.join(root_path, 'app/jin10_report/page.js') ], {

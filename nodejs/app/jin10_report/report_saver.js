@@ -8,7 +8,7 @@ const mysql = require('mysql'),
     redis_client = redis.createClient(config.redis.port, config.redis.server),
     fs = require('fs');
 
-var sql_queue = [], ind = 0;
+var sql_queue = [], ind = 0, querying = false;
 
 const maps = {
     'build_dc_cftc_merchant_currency': build_position,
@@ -96,7 +96,8 @@ function query_sql(sql) {
     if(sql) {
         sql_queue.push(sql);
     }
-    else if(sql_queue.length > 0){
+
+    if(!querying && sql_queue.length > 0) {
         all_sql = sql_queue.join('');
         fs.writeFile("sql_" + ind, all_sql, function(err, data){
             console.log("write sql");
