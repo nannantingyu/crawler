@@ -8,6 +8,8 @@ const mysql = require('mysql'),
     redis_client = redis.createClient(config.redis.port, config.redis.server),
     fs = require('fs');
 
+var sql_queue = [], ind = 0;
+
 const maps = {
     'build_dc_cftc_merchant_currency': build_position,
     'build_dc_cftc_merchant_goods': build_position,
@@ -91,15 +93,26 @@ function build_position(index, alldata, dbname, sql) {
 }
 
 function query_sql(sql) {
-    console.log(sql);
-    mysqlconnection.query(sql, function(err, rows, fields){
-        if(err) {
-            console.log('insert failed, ', err);
-        }
-        else{
-            console.log('insert success');
-        }
-    });
+    if(sql) {
+        sql_queue.push(sql);
+    }
+    else if(sql_queue.length > 0){
+        all_sql = sql_queue.join('');
+        fs.writeFile("sql_" + ind, all_sql, function(err, data){
+            console.log("write sql");
+        });
+
+        mysqlconnection.query(all_sql, function(err, rows, fields){
+            if(err) {
+                console.log('insert failed, ', err);
+            }
+            else{
+                console.log('insert success');
+            }
+
+            query_sql();
+        });
+    }
 }
 
 function build_dc_lme_report(index, alldata, dbname, sql) {
