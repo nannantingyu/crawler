@@ -71,12 +71,18 @@ socket.on('user message', function(msg){
             updated_time: moment().format("YYYY-MM-DD HH:mm:ss")
         }
 
-        sql = `update crawl_economic_calendar set quota_name="${msg_dt['quota_name']}", former_value="${msg_dt['former_value']}", predicted_value="${msg_dt['predicted_value']}", published_value="${msg_dt['published_value']}", influence="${msg_dt['influence']}", country="${msg_dt['country']}", updated_time="${msg_dt['updated_time']}" where source_id=${msg_dt['source_id']};`;
-        //for(let o in msg_dt) {
-        //    sql += o + '="' + msg_dt[o] + '",';
-        //}
-        //
-        //sql = sql.substring(0, sql.length-1) + ' where source_id=' + msg[11] + ';';
+        //sql = `update crawl_economic_calendar set quota_name="${msg_dt['quota_name']}", former_value="${msg_dt['former_value']}", predicted_value="${msg_dt['predicted_value']}", published_value="${msg_dt['published_value']}", influence="${msg_dt['influence']}", country="${msg_dt['country']}", updated_time="${msg_dt['updated_time']}" where source_id=${msg_dt['source_id']};`;
+        sql = 'update crawl_economic_calendar set ';
+        for(let o in msg_dt) {
+            if(msg_dt[o]) {
+                sql += o + '="' + msg_dt[o] + '",';
+            }
+            else {
+                sql += o + '=null,';
+            }
+        }
+
+        sql = sql.substring(0, sql.length-1) + ' where source_id=' + msg[11] + ';';
         mysqlconnection.query(sql, function(err, row, fields) {
             if (err) {
                 logger.error('error sql: ' + sql);
@@ -100,18 +106,52 @@ socket.on('today', function(msg){
 function build_sql(index, alldata) {
     if(index < alldata.length) {
         let message = alldata[index], now = moment().format("YYYY-MM-DD HH:mm:ss");
+        let msg_dt = {
+            quota_name: message['country'] + message['datename'] + message['dataname'],
+            former_value: message["previous"],
+            predicted_value: message["consensus"],
+            published_value: message["actual"],
+            country: message["country"],
+            unit: message["unit"],
+            dataname: message["dataname"],
+            datename: message["datename"],
+            importance: message["star"],
+            updated_time: moment().format("YYYY-MM-DD HH:mm:ss")
+        };
+
         redis_client.sismember('rili:jin10', message['id'], function(err, data){
-            quota_name = message['country']+message['datename']+message['dataname'];
             if(data) {
-                sql += `update crawl_economic_calendar set quota_name='${quota_name}', country='${message["country"]}', unit='${message["unit"]}', dataname='${message["dataname"]}', datename='${message["datename"]}', importance=${message["star"]}, former_value='${message["previous"]}', predicted_value='${message["consensus"]}', published_value='${message["actual"]}', updated_time='${now}' where source_id=${message["id"]};`;
+                sql += 'update crawl_economic_calendar set ';
+                for(let o in msg_dt) {
+                    if(msg_dt[o]) {
+                        sql += o + '="' + msg_dt[o] + '",';
+                    }
+                    else {
+                        sql += o + '=null,';
+                    }
+                }
+
+                sql = sql.substring(0, sql.length-1) + ' where source_id=' + message["id"] + ';';
             }
             else {
-                sql += `insert into crawl_economic_calendar(country, unit, dataname, datename, pub_time, importance, former_value, predicted_value, published_value, source_id, created_time, updated_time, quota_name) values ("${message['country']}", "${message['unit']}", "${message['dataname']}", "${message['datename']}", "${moment(message['timestr']).format('YYYY-MM-DD HH:mm:ss')}", ${message["star"]}, "${message['previous']}", "${message['consensus']}", "${message['actual']}", ${message["id"]}, "${now}", "${now}", "${quota_name}");`;
+                sql += `insert into crawl_economic_calendar(${Object.keys(msg_dt).join(',')}) values (`;
+                for(let o in msg_dt) {
+                    if(msg_dt[o]) {
+                        sql += "'" + msg_dt[o] + "',";
+                    }
+                    else {
+                        sql += 'null,';
+                    }
+                }
+
+                sql = sql.substring(0, sql.length-1) + ');';
             }
+
 
             redis_client.sadd('rili:jin10', message['id']);
 
             if(index == alldata.length-1 && sql){
+                logger.info(sql);
                 mysqlconnection.query(sql, function(err, rows, fields) {
                     if (err) {
                         logger.error('error sql: ' + sql);

@@ -26,7 +26,18 @@ from crawler.models.crawl_zhanzhang import CrawlZhanzhang
 from crawler.models.crawl_jin10_article import CrawlJin10Article
 from crawler.models.crawl_article import CrawlArticle
 from crawler.models.crawl_ibrebates import Ibrebates
+
 from crawler.models.crawl_ssi_trend import CrawlSsiTrend
+from crawler.models.crawl_ssi_trend_forxfact import CrawlSsiTrend as CrawlSsiTrend_forxfact
+from crawler.models.crawl_ssi_trend_saxobank import CrawlSsiTrend as CrawlSsiTrend_saxobank
+from crawler.models.crawl_ssi_trend_myfxbook import CrawlSsiTrend as CrawlSsiTrend_myfxbook
+from crawler.models.crawl_ssi_trend_instfor import CrawlSsiTrend as CrawlSsiTrend_instfor
+from crawler.models.crawl_ssi_trend_ftroanda import CrawlSsiTrend as CrawlSsiTrend_ftroanda
+from crawler.models.crawl_ssi_trend_fiboforx import CrawlSsiTrend as CrawlSsiTrend_fiboforx
+from crawler.models.crawl_ssi_trend_dukscopy import CrawlSsiTrend as CrawlSsiTrend_dukscopy
+from crawler.models.crawl_ssi_trend_alpari import CrawlSsiTrend as CrawlSsiTrend_alpari
+from crawler.models.crawl_ssi_trend_fxcm import CrawlSsiTrend as CrawlSsiTrend_fxcm
+
 import crawler.items as items
 import datetime
 
@@ -94,10 +105,22 @@ class JianKongPipeline(object):
             self.parse_ibrebates(item)
         elif spider.name in ['jin10_ssi_trends']:
             self.parse_ssi_trends(item)
+        elif spider.name in ['jin10_ssi_trends_today']:
+            self.parse_ssi_trends_today(item)
+
+    def parse_ssi_trends_today(self, item):
+        with session_scope(self.sess) as session:
+            all_item = []
+            for it in item:
+                crawlSSiTrend = CrawlSsiTrend(**item[it])
+                all_item.append(crawlSSiTrend)
+
+            if len(all_item) > 0:
+                session.add_all(all_item)
 
     def parse_ssi_trends(self, item):
         with session_scope(self.sess) as session:
-
+            CrawlSsiTrend = eval("CrawlSsiTrend_" + item[0]['platform'])
             query = session.query(func.max(CrawlSsiTrend.time).label("max_time")).filter(
                 and_(
                     CrawlSsiTrend.type == item[0]['type'],
@@ -110,7 +133,6 @@ class JianKongPipeline(object):
             all_item = []
             for it in item:
                 if max_time is None or item[it]['time'] > max_time.strftime('%Y-%m-%d %H:%M:%I'):
-                    print item[it]['time'], max_time.strftime('%Y-%m-%d %H:%M:%I') if max_time else max_time
                     crawlSSiTrend = CrawlSsiTrend(**item[it])
                     all_item.append(crawlSSiTrend)
 
