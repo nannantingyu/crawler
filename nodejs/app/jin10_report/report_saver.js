@@ -98,12 +98,9 @@ function query_sql(sql) {
     }
 
     if(!querying && sql_queue.length > 0) {
-        all_sql = sql_queue.join('');
-        fs.writeFile("sql_" + ind, all_sql, function(err, data){
-            console.log("write sql");
-        });
-
         querying = true;
+        all_sql = sql_queue.join('');
+
         mysqlconnection.query(all_sql, function(err, rows, fields){
             if(err) {
                 console.log('insert failed, ', err);
@@ -115,6 +112,12 @@ function query_sql(sql) {
             querying = false;
             query_sql();
         });
+
+        fs.writeFile("sql_" + ind, all_sql, function(err, data){
+            console.log("write sql");
+        });
+
+        ind ++;
     }
 }
 
