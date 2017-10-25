@@ -39,7 +39,7 @@ spawnObj.stderr.on('data', (data) => {
 });
 spawnObj.on('close', function(code) {
     console.log('close code : ' + code);
-    process.exit();
+    //process.exit();
 });
 
 spawnObj.on('exit', (code) => {
