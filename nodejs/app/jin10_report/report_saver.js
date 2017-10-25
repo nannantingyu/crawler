@@ -143,9 +143,9 @@ function query_sql(sql) {
             }
         });
 
-        fs.writeFile("sql_" + ind, all_sql, function(err, data){
-            console.log("write sql");
-        });
+        //fs.writeFile("sql_" + ind, all_sql, function(err, data){
+        //    console.log("write sql");
+        //});
 
         ind ++;
     }
