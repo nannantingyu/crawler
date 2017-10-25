@@ -110,6 +110,16 @@ function build_position(index, alldata, dbname, sql) {
         console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
+    else{
+        check_and_exit();
+    }
+}
+
+function check_and_exit() {
+    ind ++;
+    if(ind >= 12) {
+        process.exit();
+    }
 }
 
 function query_sql(sql) {
@@ -138,7 +148,7 @@ function query_sql(sql) {
             if(sql_queue.length > 0) {
                 query_sql();
             }
-            else{
+            else if(ind >= 12){
                 process.exit();
             }
         });
@@ -175,6 +185,9 @@ function build_dc_lme_report(index, alldata, dbname, sql) {
         console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
+    else{
+        check_and_exit();
+    }
 }
 
 function build_contract(index, alldata, dbname, sql){
@@ -202,6 +215,9 @@ function build_contract(index, alldata, dbname, sql){
         console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
+    else{
+        check_and_exit();
+    }
 }
 
 function build_etf(index, alldata, dbname, sql) {
@@ -226,6 +242,9 @@ function build_etf(index, alldata, dbname, sql) {
         console.log(maps['build_' + dbname]);
         query_sql(sql);
     }
+    else{
+        check_and_exit();
+    }
 }
 
 function build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
@@ -249,5 +268,8 @@ function build_dc_nonfarm_payrolls(index, alldata, dbname, cat_name, sql) {
     else if(sql) {
         console.log(maps['build_' + dbname]);
         query_sql(sql);
+    }
+    else{
+        check_and_exit();
     }
 }
