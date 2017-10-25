@@ -4,9 +4,29 @@ const mysql = require('mysql'),
     moment = require("moment"),
     redis = require('redis'),
     config = require(path.join(root_path, "config")),
-    mysqlconnection = mysql.createConnection(config.mysql),
+//mysqlconnection = mysql.createConnection(config.mysql),
     redis_client = redis.createClient(config.redis.port, config.redis.server),
     fs = require('fs');
+
+function handleDisconnect() {
+    mysqlconnection = mysql.createConnection(config.mysql);
+    mysqlconnection.connect(function(err) {
+        if(err) {
+            console.log('error when connecting to db:', err);
+            setTimeout(handleDisconnect, 2000);
+        }
+    });
+    mysqlconnection.on('error', function(err) {
+        console.log('db error', err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect();
+        } else {
+            throw err;
+        }
+    });
+}
+
+handleDisconnect();
 
 var sql_queue = [], ind = 0, querying = false;
 
@@ -101,19 +121,26 @@ function query_sql(sql) {
 
     if(!querying && sql_queue.length > 0) {
         querying = true;
-        all_sql = sql_queue.join('');
-        sql_queue.length = 0;
+        all_sql = sql_queue.pop();
+        //sql_queue.length = 0;
 
         mysqlconnection.query(all_sql, function(err, rows, fields){
             if(err) {
-                console.log('insert failed, ', err);
+                console.log('insert failed, ');
+                fs.appendFile('err.log', err, function(err, data){ console.log('write err to file;'); })
             }
             else{
                 console.log('insert success');
             }
 
             querying = false;
-            query_sql();
+
+            if(sql_queue.length > 0) {
+                query_sql();
+            }
+            else{
+                process.exit();
+            }
         });
 
         fs.writeFile("sql_" + ind, all_sql, function(err, data){
