@@ -120,11 +120,27 @@ class Jin10ArticleSpider(scrapy.Spider):
                 item['source_site'] = 'jin10'
                 item['source_id'] = util.get_sourceid(item['source_url'])
 
-                item_in_redis = self.r.zscore('detail_pages', item['source_url'])
-                if item_in_redis is None:
-                    self.r.zadd('detail_pages', item['source_url'], 0)
+                item = {
+                    'title': dt['title'],
+                    'image': image_path,
+                    'description': dt['desc'],
+                    'keywords': dt['keyword'],
+                    'publish_time': datetime.datetime.strptime(dt['time_show'], "%Y-%m-%d %H:%M:%S"),
+                    'type': self.categories[self.cat_index]['name'],
+                    'source_url': self.detail_json_url.format(id=dt['id']),
+                    'source_site': 'jin10',
+                    'source_id': util.get_sourceid(item['source_url'])
+                }
 
-                yield item
+                r_id = 'jin10:%s' % dt['id']
+                self.r.hmset(r_id, item)
+                self.r.sadd('jin10:page', item['source_url'])
+
+                # item_in_redis = self.r.zscore('detail_pages', item['source_url'])
+                # if item_in_redis is None:
+                #     self.r.zadd('detail_pages', item['source_url'], 0)
+
+                # yield item
 
         self.categories[self.cat_index]['page_index'] += 1
         cat_now = self.categories[self.cat_index]
@@ -140,6 +156,7 @@ class Jin10ArticleSpider(scrapy.Spider):
                 list_url.format(cat=cat_now['id'], page=(
                 cat_now['page_count'] + 1 - cat_now['page_index'])),
                 meta={'cookiejar': self.name}, callback=self.parse_info)
+
         elif self.cat_index < len(self.categories)-1:
             self.cat_index += 1
             cat_now = self.categories[self.cat_index]
@@ -151,18 +168,37 @@ class Jin10ArticleSpider(scrapy.Spider):
                 main_url.format(cat=self.categories[self.cat_index]['id']),
                 meta={'cookiejar': self.name}, callback=self.parse_list)
         else:
-            details_first = self.r.zrange('detail_pages', 0, 0, withscores=True)
-            if len(details_first) > 0 and int(details_first[0][1]) == 0:
-                yield scrapy.Request(details_first[0][0], meta={'cookiejar': self.name}, callback=self.parse_body)
+            details_first = self.get_detail_page()
+            if details_first:
+                yield scrapy.Request(details_first, meta={'cookiejar': self.name}, callback=self.parse_body)
+
+    def get_detail_page(self):
+        page = self.r.spop('jin10:page')
+        return page
 
     def parse_body(self, response):
-        self.r.zadd('detail_pages', response.url, 1)
         parser = ArticleParser(response)
         item = parser.parse()
+
+        item_id_pat = re.compile(r"details\/(\d+)\.json")
+        item_id = item_id_pat.findall(response.url)[0]
+        r_id = 'jin10:%s' % item_id
+        item_detail = self.r.hgetall(r_id)
+
+        item['publish_time'] = item_detail['publish_time']
+        item['source_site'] = 'jin10'
+        item['source_id'] = item_detail['source_id']
+        item['title'] = item_detail['title']
+        item['image'] = item_detail['image']
+        item['type'] = item_detail['type']
+        item['keywords'] = item_detail['keywords']
+        item['description'] = item_detail['description']
+        item['source_url'] = response.url
+
         yield item
 
-        rand = random.randint(3, 7)
-        time.sleep(rand)
-        details_first = self.r.zrange('detail_pages', 0, 0, withscores=True)
-        if len(details_first) > 0 and int(details_first[0][1]) == 0:
-            yield scrapy.Request(details_first[0][0], meta={'cookiejar': self.name}, callback=self.parse_body)
+        # rand = random.randint(3, 7)
+        # time.sleep(rand)
+        details_first = self.get_detail_page()
+        if details_first:
+            yield scrapy.Request(details_first, meta={'cookiejar': self.name}, callback=self.parse_body)
