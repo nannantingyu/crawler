@@ -99,7 +99,7 @@ class JianKongPipeline(object):
             self.parse_zhanzhang(item)
         elif spider.name in ['jin10_article', 'crawl_jin10_article_detail ']:
             self.parse_jin10_article(item)
-        elif spider.name in ['weibo', 'weibo_article_detail']:
+        elif spider.name in ['weibo', 'weibo_article_detail', 'fx678_article']:
             self.parse_article(item)
         elif spider.name in ['ibrebates']:
             self.parse_ibrebates(item)
