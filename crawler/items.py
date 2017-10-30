@@ -135,6 +135,10 @@ class CrawlEconomicCalendarItem(scrapy.Item):
     data_influence = scrapy.Field()
     data_define = scrapy.Field()
     funny_read = scrapy.Field()
+    dataname = scrapy.Field()
+    datename = scrapy.Field()
+    dataname_id = scrapy.Field()
+    unit = scrapy.Field()
 
 class CrawlEconomicEventItem(scrapy.Item):
     """金10财经事件"""

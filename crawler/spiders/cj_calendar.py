@@ -92,6 +92,10 @@ class CjCalendarSpider(scrapy.Spider):
             item['published_value'] = dt['actual']
             item['influence'] = dt['status_name']
             item['source_id'] = dt['dataId']
+            item['dataname'] = dt['dataname']
+            item['datename'] = dt['datename']
+            item['dataname_id'] = dt['datanameId']
+            item['unit'] = dt['unit']
 
             # 将已经抓过的财经日历id塞进到redis
             if not self.r.sismember('rili:jin10', dt['dataId']):
