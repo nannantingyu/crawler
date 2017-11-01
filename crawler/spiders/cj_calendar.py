@@ -7,6 +7,7 @@ from crawler.util import get_url_param
 from crawler.items import CrawlEconomicCalendarItem
 from crawler.items import CrawlEconomicEventItem
 from crawler.items import CrawlEconomicHolidayItem
+from crawler.items import CrawlEconomicJieduItem
 import redis
 import urllib
 import logging
@@ -101,7 +102,7 @@ class CjCalendarSpider(scrapy.Spider):
             if not self.r.sismember('rili:jin10', dt['dataId']):
                 self.r.sadd('rili:jin10', dt['dataId'])
 
-            self.all_data.append({"dataid":dt['dataId'], 'pub_time':dt['publictime']})
+            self.all_data.append({"dataid":dt['dataId'], 'pub_time':dt['publictime'], 'dataname_id': dt['datanameId']})
             all_data[all_index] = item
             all_index += 1
 
@@ -183,9 +184,10 @@ class CjCalendarSpider(scrapy.Spider):
             if self.jiedu_index < len(self.all_data):
                 dataid = self.all_data[self.jiedu_index]['dataid']
                 pub_time = self.all_data[self.jiedu_index]['pub_time']
+                dataname_id = self.all_data[self.jiedu_index]['dataname_id']
                 yield scrapy.Request(
-                    'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}'.format(dataid=dataid,
-                                                                                                pubtime=pub_time),
+                    'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}&dataname_id={dataname_id}'.format(dataid=dataid,
+                                                                                                pubtime=pub_time, dataname_id=dataname_id),
                     meta={"cookiejar": response.meta['cookiejar'], 'dont_redirect': True},
                     callback=self.parse_jiedu)
 
@@ -194,19 +196,18 @@ class CjCalendarSpider(scrapy.Spider):
         dataid_re = re.compile(r"jiedu\/(\d+)\.")
         dataid = dataid_re.findall(url)[-1]
         params = get_url_param(url)
-        pubtime = urllib.unquote(params['pubtime'])
+        dataname_id = urllib.unquote(params['dataname_id'])
 
         data = json.loads(response.body)
-        item = CrawlEconomicCalendarItem()
+        item = CrawlEconomicJieduItem()
         item['next_pub_time'] = data['publictime']
-        item['pub_time'] = pubtime
         item['pub_agent'] = data['institutions']
         item['pub_frequency'] = data['frequency']
         item['count_way'] = data['method']
         item['data_influence'] = data['impact']
         item['data_define'] = data['paraphrase']
         item['funny_read'] = data['focus']
-        item['source_id'] = dataid
+        item['dataname_id'] = dataname_id
 
         yield {0:item}
 
@@ -214,9 +215,11 @@ class CjCalendarSpider(scrapy.Spider):
         if self.jiedu_index < len(self.all_data):
             dataid = self.all_data[self.jiedu_index]['dataid']
             pub_time = self.all_data[self.jiedu_index]['pub_time']
+            dataname_id = self.all_data[self.jiedu_index]['dataname_id']
             yield scrapy.Request(
-                'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}'.format(dataid=dataid,
-                                                                                            pubtime=pub_time),
+                'https://rili.jin10.com/datas/jiedu/{dataid}.json?pubtime={pubtime}&dataname_id={dataname_id}'.format(
+                    dataid=dataid,
+                    pubtime=pub_time, dataname_id=dataname_id),
                 meta={"cookiejar": response.meta['cookiejar'], 'dont_redirect': True},
                 callback=self.parse_jiedu)
 

@@ -218,3 +218,14 @@ class SsiTrendsItem(scrapy.Item):
     platform = scrapy.Field()
     type = scrapy.Field()
     long_position = scrapy.Field()
+
+
+class CrawlEconomicJieduItem(scrapy.Item):
+    next_pub_time = scrapy.Field()
+    pub_agent = scrapy.Field()
+    pub_frequency = scrapy.Field()
+    count_way = scrapy.Field()
+    data_influence = scrapy.Field()
+    data_define = scrapy.Field()
+    funny_read = scrapy.Field()
+    dataname_id = scrapy.Field()

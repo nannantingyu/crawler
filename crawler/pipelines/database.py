@@ -26,6 +26,7 @@ from crawler.models.crawl_zhanzhang import CrawlZhanzhang
 from crawler.models.crawl_jin10_article import CrawlJin10Article
 from crawler.models.crawl_article import CrawlArticle
 from crawler.models.crawl_ibrebates import Ibrebates
+from crawler.models.crawl_economic_jiedu import CrawlEconomicJiedu
 
 from crawler.models.crawl_ssi_trend import CrawlSsiTrend
 from crawler.models.crawl_ssi_trend_forxfact import CrawlSsiTrend as CrawlSsiTrend_forxfact
@@ -72,6 +73,14 @@ class SqlReader(object):
             query = session.query(BaiduTongji.site, func.max(BaiduTongji.access_time).label('access_time')).group_by(BaiduTongji.site).all()
             return query
 
+    def read_jiedu(self):
+        with session_scope(self.sess) as session:
+            query = session.query(CrawlEconomicCalendar.dataname_id, CrawlEconomicCalendar.source_id).filter(
+                CrawlEconomicCalendar.dataname_id != None
+            ).group_by(CrawlEconomicCalendar.dataname_id).all()
+
+            return query
+
 
 class JianKongPipeline(object):
     """保存文章到数据库"""
@@ -107,6 +116,21 @@ class JianKongPipeline(object):
             self.parse_ssi_trends(item)
         elif spider.name in ['jin10_ssi_trends_today']:
             self.parse_ssi_trends_today(item)
+        elif spider.name in ['cj_jiedu']:
+            self.parse_jiedu(item)
+
+    def parse_jiedu(self, item):
+        with session_scope(self.sess) as session:
+            crawlEconomicCalendar = CrawlEconomicCalendar(**item)
+            session.query(CrawlEconomicCalendar).filter(CrawlEconomicCalendar.dataname_id == crawlEconomicCalendar.dataname_id).update({
+                CrawlEconomicCalendar.next_pub_time: crawlEconomicCalendar.next_pub_time,
+                CrawlEconomicCalendar.pub_agent: crawlEconomicCalendar.pub_agent,
+                CrawlEconomicCalendar.pub_frequency: crawlEconomicCalendar.pub_frequency,
+                CrawlEconomicCalendar.count_way: crawlEconomicCalendar.count_way,
+                CrawlEconomicCalendar.data_influence: crawlEconomicCalendar.data_influence,
+                CrawlEconomicCalendar.data_define: crawlEconomicCalendar.data_define,
+                CrawlEconomicCalendar.funny_read: crawlEconomicCalendar.funny_read
+            })
 
     def parse_ssi_trends_today(self, item):
         with session_scope(self.sess) as session:
@@ -344,7 +368,30 @@ class JianKongPipeline(object):
                     if len(all_data) > 0:
                         session.add_all(all_data)
 
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicJieduItem):
+                with session_scope(self.sess) as session:
+                    crawlEconomicJiedu = CrawlEconomicJiedu(**item[0])
 
+                    query = session.query(CrawlEconomicJiedu.dataname_id).filter(and_(
+                        CrawlEconomicJiedu.dataname_id == crawlEconomicJiedu.dataname_id,
+                        # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                    )).one_or_none()
+
+                    if query:
+                        data = {
+                            'next_pub_time': crawlEconomicJiedu.next_pub_time,
+                            'pub_agent': crawlEconomicJiedu.pub_agent,
+                            'pub_frequency': crawlEconomicJiedu.pub_frequency,
+                            'count_way': crawlEconomicJiedu.count_way,
+                            'data_influence': crawlEconomicJiedu.data_influence,
+                            'data_define': crawlEconomicJiedu.data_define,
+                            'funny_read': crawlEconomicJiedu.funny_read
+                        }
+
+                        session.query(CrawlEconomicJiedu).filter(
+                            CrawlEconomicJiedu.dataname_id == crawlEconomicJiedu.dataname_id).update(data)
+                    else:
+                        session.add(crawlEconomicJiedu)
 
     def process_jiankongbao(self, item):
         if isinstance(item, items.ChinaTimeItem):
