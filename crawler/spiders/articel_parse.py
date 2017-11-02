@@ -90,6 +90,11 @@ class ArticleParser(object):
                 logging.error("[crawl image] failed open image url: " + full_img_url)
 
         htmlcontent = pat_img.sub(Nth(uuids), htmlcontent)
+
+        #remove all link in body
+        a_pat = re.compile("<a.*?>(.*)<\/a>")
+        htmlcontent = a_pat.sub("\g<1>", htmlcontent)
+
         self.item['body'] = htmlcontent
 
 class Nth(object):
