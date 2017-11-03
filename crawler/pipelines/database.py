@@ -22,6 +22,7 @@ from crawler.models.crawl_baidu_tongji import BaiduTongji
 from crawler.models.crawl_fx678_economic_calendar import CrawlFx678EconomicCalendar
 from crawler.models.crawl_fx678_economic_event import CrawlFx678EconomicEvent
 from crawler.models.crawl_fx678_economic_holiday import CrawlFx678EconomicHoliday
+from crawler.models.crawl_fx678_economic_jiedu import CrawlFx678EconomicJiedu
 from crawler.models.crawl_economic_calendar import CrawlEconomicCalendar
 from crawler.models.crawl_economic_event import CrawlEconomicEvent
 from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
@@ -123,6 +124,31 @@ class JianKongPipeline(object):
             self.parse_jiedu(item)
         elif spider.name in ['cj_fx678']:
             self.parse_fx678_calendar(item)
+        elif spider.name in ['fx678_cj_jiedu']:
+            self.parse_fx678_jiedu(item)
+
+    def parse_fx678_jiedu(self, item):
+        with session_scope(self.sess) as session:
+            crawlFx678EconomicJiedu = CrawlFx678EconomicJiedu(**item)
+            query = session.query(CrawlFx678EconomicJiedu.dataname_id).filter(and_(
+                CrawlFx678EconomicJiedu.dataname_id == crawlFx678EconomicJiedu.dataname_id,
+            )).one_or_none()
+
+            if query:
+                session.query(CrawlEconomicCalendar).filter(
+                    CrawlEconomicCalendar.dataname_id == crawlFx678EconomicJiedu.dataname_id
+                ).update({
+                    'next_pub_time': crawlFx678EconomicJiedu.next_pub_time,
+                    'pub_agent': crawlFx678EconomicJiedu.pub_agent,
+                    'pub_frequency': crawlFx678EconomicJiedu.pub_frequency,
+                    'count_way': crawlFx678EconomicJiedu.count_way,
+                    'data_influence': crawlFx678EconomicJiedu.data_influence,
+                    'data_define': crawlFx678EconomicJiedu.data_define,
+                    'funny_read': crawlFx678EconomicJiedu.funny_read
+
+                })
+            else:
+                session.add(crawlFx678EconomicJiedu)
 
     def parse_jiedu(self, item):
         with session_scope(self.sess) as session:
