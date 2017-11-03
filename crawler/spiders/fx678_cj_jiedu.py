@@ -15,6 +15,11 @@ class CjJieduSpider(scrapy.Spider):
     url_format = "http://rl.fx678.com/id/{dataname_id}.html"
     index = 1
     id_x = None
+
+    custom_settings = {
+        'LOG_FILE': '../logs/fx678_cj_jiedu_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
+    }
+
     def __init__(self):
         self.r = redis.Redis(host='127.0.0.1')
 

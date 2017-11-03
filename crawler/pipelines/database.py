@@ -453,7 +453,6 @@ class JianKongPipeline(object):
                     for ditem in item:
                         ditem = item[ditem]
                         crawlEconomicEvent = CrawlFx678EconomicEvent(**ditem)
-                        print crawlEconomicEvent.source_id
                         query = session.query(CrawlFx678EconomicEvent.id).filter(and_(
                             CrawlFx678EconomicEvent.source_id == crawlEconomicEvent.source_id,
                             # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
