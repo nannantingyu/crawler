@@ -248,8 +248,9 @@ class CjFx678Spider(scrapy.Spider):
             country = tds_holiday[1].xpath("./div[@class='flag_bb']/span/text()").extract_first()
             address = tds_holiday[2].xpath("./text()").extract_first()
             event = tds_holiday[3].xpath("./text()").extract_first()
-            holiday_name = event.split("，")[0]
-            detail = event.split("，")[1]
+            holidays = event.split("，")
+            holiday_name = holidays[0]
+            detail = holidays[1] if len(holidays) > 1 else ""
 
             item = CrawlEconomicHolidayItem()
             item['time'] = stime
