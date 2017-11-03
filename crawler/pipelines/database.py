@@ -19,6 +19,9 @@ from crawler.models.crawl_monitor_type import MonitorType
 from crawler.models.crawl_province_time import ProvinceTime
 from crawler.models.crawl_type_time import TypeTime
 from crawler.models.crawl_baidu_tongji import BaiduTongji
+from crawler.models.crawl_fx678_economic_calendar import CrawlFx678EconomicCalendar
+from crawler.models.crawl_fx678_economic_event import CrawlFx678EconomicEvent
+from crawler.models.crawl_fx678_economic_holiday import CrawlFx678EconomicHoliday
 from crawler.models.crawl_economic_calendar import CrawlEconomicCalendar
 from crawler.models.crawl_economic_event import CrawlEconomicEvent
 from crawler.models.crawl_economic_holiday import CrawlEconomicHoliday
@@ -118,6 +121,8 @@ class JianKongPipeline(object):
             self.parse_ssi_trends_today(item)
         elif spider.name in ['cj_jiedu']:
             self.parse_jiedu(item)
+        elif spider.name in ['cj_fx678']:
+            self.parse_fx678_calendar(item)
 
     def parse_jiedu(self, item):
         with session_scope(self.sess) as session:
@@ -223,7 +228,6 @@ class JianKongPipeline(object):
                 if data:
                     session.query(CrawlJin10Article).filter(
                         CrawlJin10Article.id == query[0]).update(data)
-
 
     def parse_zhanzhang(self, item):
         all_data = [CrawlZhanzhang(**item[it]) for it in item]
@@ -362,6 +366,157 @@ class JianKongPipeline(object):
                             if data:
                                 session.query(CrawlEconomicHoliday).filter(
                                     CrawlEconomicHoliday.id == query[0]).update(data)
+                        else:
+                            all_data.append(crawlEconomicHoliday)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicJieduItem):
+                with session_scope(self.sess) as session:
+                    crawlEconomicJiedu = CrawlEconomicJiedu(**item[0])
+
+                    query = session.query(CrawlEconomicJiedu.dataname_id).filter(and_(
+                        CrawlEconomicJiedu.dataname_id == crawlEconomicJiedu.dataname_id,
+                        # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                    )).one_or_none()
+
+                    if query:
+                        data = {
+                            'next_pub_time': crawlEconomicJiedu.next_pub_time,
+                            'pub_agent': crawlEconomicJiedu.pub_agent,
+                            'pub_frequency': crawlEconomicJiedu.pub_frequency,
+                            'count_way': crawlEconomicJiedu.count_way,
+                            'data_influence': crawlEconomicJiedu.data_influence,
+                            'data_define': crawlEconomicJiedu.data_define,
+                            'funny_read': crawlEconomicJiedu.funny_read
+                        }
+
+                        session.query(CrawlEconomicJiedu).filter(
+                            CrawlEconomicJiedu.dataname_id == crawlEconomicJiedu.dataname_id).update(data)
+                    else:
+                        session.add(crawlEconomicJiedu)
+
+    def parse_fx678_calendar(self, item):
+        if item and len(item) > 0:
+            if 0 in item and isinstance(item[0], items.CrawlFx678EconomicCalendarItem):
+                with session_scope(self.sess) as session:
+                    all_data = []
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlfx678EconomicCalendar = CrawlFx678EconomicCalendar(**ditem)
+
+                        query = session.query(CrawlFx678EconomicCalendar.id).filter(and_(
+                            CrawlFx678EconomicCalendar.source_id == crawlfx678EconomicCalendar.source_id,
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query is not None:
+                            data = {}
+                            if crawlfx678EconomicCalendar.country is not None:
+                                data['country'] = crawlfx678EconomicCalendar.country
+                            if crawlfx678EconomicCalendar.pub_time is not None:
+                                data['pub_time'] = crawlfx678EconomicCalendar.pub_time
+                            if crawlfx678EconomicCalendar.quota_name is not None:
+                                data['quota_name'] = crawlfx678EconomicCalendar.quota_name
+                            if crawlfx678EconomicCalendar.importance is not None:
+                                data['importance'] = crawlfx678EconomicCalendar.importance
+                            if crawlfx678EconomicCalendar.former_value is not None:
+                                data['former_value'] = crawlfx678EconomicCalendar.former_value
+                            if crawlfx678EconomicCalendar.predicted_value is not None:
+                                data['predicted_value'] = crawlfx678EconomicCalendar.predicted_value
+                            if crawlfx678EconomicCalendar.published_value is not None:
+                                data['published_value'] = crawlfx678EconomicCalendar.published_value
+                            if crawlfx678EconomicCalendar.influence is not None:
+                                data['influence'] = crawlfx678EconomicCalendar.influence
+                            if crawlfx678EconomicCalendar.position is not None:
+                                data['position'] = crawlfx678EconomicCalendar.position
+
+                            if data:
+                                session.query(CrawlFx678EconomicCalendar).filter(
+                                    CrawlFx678EconomicCalendar.id == query[0]).update(data)
+
+                        else:
+                            all_data.append(crawlfx678EconomicCalendar)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicEventItem):
+                all_data = []
+
+                with session_scope(self.sess) as session:
+                    # crawlEconomicEvent = CrawlEconomicEvent(**item[0])
+                    # session.query(CrawlEconomicEvent).filter(
+                    #     CrawlEconomicEvent.date == crawlEconomicEvent.date).delete()
+
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlEconomicEvent = CrawlFx678EconomicEvent(**ditem)
+                        print crawlEconomicEvent.source_id
+                        query = session.query(CrawlFx678EconomicEvent.id).filter(and_(
+                            CrawlFx678EconomicEvent.source_id == crawlEconomicEvent.source_id,
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query:
+                            data = {}
+                            if crawlEconomicEvent.country is not None:
+                                data['country'] = crawlEconomicEvent.country
+                            if crawlEconomicEvent.time is not None:
+                                data['time'] = crawlEconomicEvent.time
+                            if crawlEconomicEvent.city is not None:
+                                data['city'] = crawlEconomicEvent.city
+                            if crawlEconomicEvent.importance is not None:
+                                data['importance'] = crawlEconomicEvent.importance
+                            if crawlEconomicEvent.event is not None:
+                                data['event'] = crawlEconomicEvent.event
+                            if crawlEconomicEvent.date is not None:
+                                data['date'] = crawlEconomicEvent.date
+
+                            if data:
+                                session.query(CrawlFx678EconomicEvent).filter(
+                                    CrawlFx678EconomicEvent.id == query[0]).update(data)
+                        else:
+                            all_data.append(crawlEconomicEvent)
+
+                    if len(all_data) > 0:
+                        session.add_all(all_data)
+
+            elif 0 in item and isinstance(item[0], items.CrawlEconomicHolidayItem):
+                all_data = []
+
+                with session_scope(self.sess) as session:
+                    # crawlEconomicHoliday = CrawlEconomicHoliday(**item[0])
+                    # session.query(CrawlEconomicHoliday).filter(CrawlEconomicHoliday.date == crawlEconomicHoliday.date).delete()
+
+                    for ditem in item:
+                        ditem = item[ditem]
+                        crawlEconomicHoliday = CrawlFx678EconomicHoliday(**ditem)
+
+                        query = session.query(CrawlFx678EconomicHoliday.id).filter(and_(
+                            CrawlFx678EconomicHoliday.source_id == crawlEconomicHoliday.source_id,
+                            # CrawlEconomicCalendar.pub_time == crawlEconomicCalendar.pub_time
+                        )).one_or_none()
+
+                        if query:
+                            data = {}
+                            if crawlEconomicHoliday.country is not None:
+                                data['country'] = crawlEconomicHoliday.country
+                            if crawlEconomicHoliday.time is not None:
+                                data['time'] = crawlEconomicHoliday.time
+                            if crawlEconomicHoliday.market is not None:
+                                data['market'] = crawlEconomicHoliday.market
+                            if crawlEconomicHoliday.holiday_name is not None:
+                                data['holiday_name'] = crawlEconomicHoliday.holiday_name
+                            if crawlEconomicHoliday.detail is not None:
+                                data['detail'] = crawlEconomicHoliday.detail
+                            if crawlEconomicHoliday.date is not None:
+                                data['date'] = crawlEconomicHoliday.date
+
+                            if data:
+                                session.query(CrawlFx678EconomicHoliday).filter(
+                                    CrawlFx678EconomicHoliday.id == query[0]).update(data)
                         else:
                             all_data.append(crawlEconomicHoliday)
 
