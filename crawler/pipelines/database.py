@@ -292,20 +292,6 @@ class JianKongPipeline(object):
                                 data['published_value'] = crawlEconomicCalendar.published_value
                             if crawlEconomicCalendar.influence is not None:
                                 data['influence'] = crawlEconomicCalendar.influence
-                            if crawlEconomicCalendar.next_pub_time is not None:
-                                data['next_pub_time'] = crawlEconomicCalendar.next_pub_time
-                            if crawlEconomicCalendar.pub_agent is not None:
-                                data['pub_agent'] = crawlEconomicCalendar.pub_agent
-                            if crawlEconomicCalendar.pub_frequency is not None:
-                                data['pub_frequency'] = crawlEconomicCalendar.pub_frequency
-                            if crawlEconomicCalendar.count_way is not None:
-                                data['count_way'] = crawlEconomicCalendar.count_way
-                            if crawlEconomicCalendar.data_influence is not None:
-                                data['data_influence'] = crawlEconomicCalendar.data_influence
-                            if crawlEconomicCalendar.data_define is not None:
-                                data['data_define'] = crawlEconomicCalendar.data_define
-                            if crawlEconomicCalendar.funny_read is not None:
-                                data['funny_read'] = crawlEconomicCalendar.funny_read
 
                             if data:
                                 session.query(CrawlEconomicCalendar).filter(
