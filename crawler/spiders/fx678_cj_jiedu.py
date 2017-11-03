@@ -40,15 +40,19 @@ class CjJieduSpider(scrapy.Spider):
         return url
 
     def parse_jiedu(self, response):
-        lis = response.xpath("./div[@class='choose_add_1_two']/ul/li")
+        lis = response.xpath(".//div[@class='choose_add_1_two']/ul/li")
+        print lis, len(lis)
         item = CrawlEconomicJieduItem()
         item['next_pub_time'] = lis[3].xpath("./text()").extract_first()
         item['pub_agent'] = lis[1].xpath("./text()").extract_first()
         item['pub_frequency'] = lis[2].xpath("./text()").extract_first()
         item['count_way'] = ""
         item['data_influence'] = lis[0].xpath("./text()").extract_first()
-        item['data_define'] = response.xpath("./div[@class='choose_add_1_top']")[0].xpath("./text()").extract_first()
-        item['funny_read'] = response.xpath("./div[@class='choose_add_1_top']")[1].xpath("./text()").extract_first()
+
+        data_info = response.xpath(".//div[@class='choose_add_1_top']")
+
+        item['data_define'] = data_info[0].xpath("./text()").extract_first()
+        item['funny_read'] = data_info[1].xpath("./text()").extract_first()
         item['dataname_id'] = self.id_x
 
         yield item
