@@ -12,7 +12,7 @@ class Fx678ArticleSpider(scrapy.Spider):
     allowed_domains = ['fx678.com', 'localhost']
     start_urls = ['http://brokers.fx678.com/articlelist/10103']
     r = redis.Redis(host="127.0.0.1", port=6379, db=0)
-    max_page = 100
+    max_page = 10
 
     type_maps = [
         {
@@ -45,6 +45,11 @@ class Fx678ArticleSpider(scrapy.Spider):
         'LOG_FILE': '../logs/fx678_article_{dt}.log'.format(dt=datetime.datetime.now().strftime('%Y%m%d'))
     }
 
+    def __init__(self, *args, **kwargs):
+        super(Fx678ArticleSpider, self).__init__(*args, **kwargs)
+        if kwargs and "max" in kwargs:
+            self.max_page = int(kwargs['max'])
+
     def get_next(self):
         url = None
         if self.type_index < len(self.type_maps):
@@ -62,10 +67,15 @@ class Fx678ArticleSpider(scrapy.Spider):
             self.page_index = 1
             self.type_index += 1
 
-    def parse(self, response):
+    def start_requests(self):
         url = self.get_next()
         if url:
             yield scrapy.Request(url, meta={'cookiejar': self.name}, callback=self.parse_list)
+
+    # def parse(self, response):
+    #     url = self.get_next()
+    #     if url:
+    #         yield scrapy.Request(url, meta={'cookiejar': self.name}, callback=self.parse_list)
 
     def get_detail_page(self):
         page = self.r.spop('fx678:page')
